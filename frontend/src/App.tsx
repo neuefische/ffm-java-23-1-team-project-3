@@ -1,14 +1,31 @@
 import './App.css'
+import {useEffect, useState} from "react";
+import {Book} from "./Types.tsx";
+import axios from "axios";
 
-function App() {
+export default function App() {
+    const [books, setBooks] = useState<Book[]>([])
+
+    useEffect(()=>{
 
 
-  return (
-    <>
+    }, [])
 
-        <p>Hello</p>
-      </>
-  )
+    function loadAllBooks (){
+        axios.get("/api/books")
+            .then((response) => {
+                setBooks(response.data);
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
+    }
+
+
+    return (
+        <>
+
+            <p>Hello</p>
+        </>
+    )
 }
-
-export default App

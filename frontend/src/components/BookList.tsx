@@ -11,7 +11,7 @@ export default function BookList( props: Props ) {
         <div className="BookList">
             {
                 props.books.map( book =>
-                    <BookCard book={book}/>
+                    <BookCard key={book.id} book={book}/>
                 )
             }
         </div>

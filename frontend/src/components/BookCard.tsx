@@ -7,7 +7,7 @@ type Props = {
 export default function BookCard( props: Props ) {
 
     return (
-        <div>
+        <div className="BookCard">
             <div>id     : {props.book.id     }</div>
             <div>title  : {props.book.title  }</div>
             <div>author : {props.book.author }</div>

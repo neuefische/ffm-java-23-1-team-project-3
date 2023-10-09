@@ -13,4 +13,8 @@ public class LibraryService {
     public List<Book> getAllBooks() {
         return libraryRepository.findAll();
     }
+
+    public Book getBookById(String id) {
+       return libraryRepository.findById(id).orElseThrow();
+    }
 }

@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
+import {Route, Routes} from "react-router-dom";
+import BookDetails from "./components/BookDetails.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -14,7 +16,7 @@ export default function App() {
             .then((response) => {
                 if (response.status!==200)
                     throw "Get wrong response status, when loading all books: "+response.status;
-                setBooks(response.data);
+                setBooks(response.data)
             })
             .catch((error)=>{
                 console.error(error);
@@ -25,7 +27,13 @@ export default function App() {
     return (
         <>
             <h1>Book Library</h1>
-            <BookList books={books}/>
+
+            <Routes>
+
+                <Route path={`/books/:id`} element={<BookDetails books={books} />} />
+                <Route path={"/books"} element={<BookList books={books}/>}/>
+
+            </Routes>
         </>
     )
 }

@@ -61,4 +61,14 @@ class LibraryServiceTest {
 		assertEquals(expected, actual);
 	}
 
+	@Test
+	void deleteBook() {
+
+		Book b1 = new Book("1", "My new book", "Me");
+
+		doThrow(NullPointerException.class).when(libraryRepository).deleteById(b1.id());
+
+		assertThrows(NullPointerException.class, () -> libraryRepository.deleteById(b1.id()));
+	}
+
 }

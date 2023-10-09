@@ -3,6 +3,7 @@ import BookCard from "./BookCard.tsx";
 
 type Props = {
     books: Book[]
+    onItemChange: () => void
 }
 
 export default function BookList( props: Props ) {
@@ -11,7 +12,7 @@ export default function BookList( props: Props ) {
         <div className="BookList">
             {
                 props.books.map( book =>
-                    <BookCard key={book.id} book={book}/>
+                    <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>
                 )
             }
         </div>

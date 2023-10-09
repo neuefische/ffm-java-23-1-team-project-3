@@ -13,4 +13,8 @@ public class LibraryService {
     public List<Book> getAllBooks() {
         return libraryRepository.findAll();
     }
+
+    public void removeBook(String id) {
+        libraryRepository.deleteById(id);
+    }
 }

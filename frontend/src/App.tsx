@@ -1,8 +1,10 @@
 import './App.css';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
+import {Routes, Route, Link} from "react-router-dom";
+import AddBook from "./components/AddBook.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -21,10 +23,15 @@ export default function App() {
             })
     }
 
-
     return (
         <>
+            <Routes>
+                <Route path={"/books/add"} element={<AddBook/>}/>
+            </Routes>
             <h1>Book Library</h1>
+            <nav>
+                <button><Link to={"/books/add"}>Add</Link></button>
+            </nav>
             <BookList books={books}/>
         </>
     )

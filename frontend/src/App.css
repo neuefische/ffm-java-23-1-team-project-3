@@ -1,0 +1,11 @@
+.BookList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.BookCard {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1em;
+    margin: 0.5em;
+}

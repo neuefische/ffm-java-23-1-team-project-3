@@ -1,3 +1,4 @@
+import './EditBook.css';
 import {Book} from "../Types.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
@@ -9,11 +10,11 @@ type Props = {
 }
 
 export default function EditBook(props: Props ) {
-    const { id } = useParams()
+    const { id } = useParams();
     const navigate = useNavigate();
-    console.debug(`Rendering EditBookForm { id:"${id}", props.books: ${props.books.length} books }`)
+    console.debug(`Rendering EditBookForm { id:"${id}", props.books: ${props.books.length} books }`);
 
-    const filteredBooks:Book[] = props.books.filter(e => e.id === id)
+    const filteredBooks:Book[] = props.books.filter(e => e.id === id);
 
     if (filteredBooks.length < 1)
         return <>
@@ -30,29 +31,29 @@ type FormProps = {
 }
 
 function EditBookForm( props: FormProps ) {
-    const [book, updateBook] = useState<Book>(props.book)
+    const [book, updateBook] = useState<Book>(props.book);
     useEffect(
         ()=> updateBook(props.book),
         [ props.book ]
-    )
+    );
     const navigate = useNavigate();
-    console.debug(`Rendering EditBookForm { id:"${props.book.id}" }`)
+    console.debug(`Rendering EditBookForm { id:"${props.book.id}" }`);
 
     function updateBookValue( name:string, value:string ) {
         updateBook( {
             ...book,
             [name]: value
-        } )
+        } );
     }
 
     function onChangeFcnI( event: ChangeEvent<HTMLInputElement> ) {
-        updateBookValue( event.target.name, event.target.value )
+        updateBookValue( event.target.name, event.target.value );
     }
 
     function saveChanges( event: FormEvent<HTMLFormElement> ) {
-        event.preventDefault()
-        update(book)
-        navigate("/")
+        event.preventDefault();
+        update(book);
+        navigate("/");
     }
 
     function update( book: Book ) {
@@ -65,7 +66,7 @@ function EditBookForm( props: FormProps ) {
             })
             .catch(reason => {
                 console.error(reason)
-            })
+            });
     }
 
     return (

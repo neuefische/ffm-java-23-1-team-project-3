@@ -16,7 +16,7 @@ export default function AddBook() {
         setAuthor(author.target.value);
     }
     function saveNewBook(event: FormEvent<HTMLFormElement>){
-        event.preventDefault();
+        //event.preventDefault();
 
         axios.post("/api/books",{
             title: title,

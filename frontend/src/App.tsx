@@ -28,7 +28,7 @@ export default function App() {
         <>
             <h1>Book Library</h1>
             <Routes>
-                <Route path="/"               element={<BookList books={books}/>}/>
+                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit" element={<EditBook books={books} reload={loadAllBooks}/>}/>
             </Routes>
         </>

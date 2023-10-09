@@ -67,6 +67,19 @@ public class LibraryIntegrationTest {
 
 	@Test
 	@DirtiesContext
+	void removeBookTest() throws Exception {
+		// Given
+		libraryRepository.save(new Book("1", "My new book", "Me"));
+
+		// When
+		mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/1"))
+				// Then
+				.andExpect(status().isOk());
+	}
+
+
+	@Test
+	@DirtiesContext
 	void whenUpdateProduct_getsInvalidID_returnsBadRequest() throws Exception {
 		// Given
 		libraryRepository.save(new Book("id1", "Title 1", "Author 1"));
@@ -136,6 +149,4 @@ public class LibraryIntegrationTest {
 							{ "id": "id1", "title": "Title 1B", "author": "Author 1B" }
 				"""));
 	}
-
-
 }

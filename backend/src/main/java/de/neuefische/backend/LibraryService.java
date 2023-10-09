@@ -17,6 +17,10 @@ public class LibraryService {
         return libraryRepository.findAll();
     }
 
+    public void removeBook(String id) {
+        libraryRepository.deleteById(id);
+    }
+
     public Book updateBook(@NonNull String id, @NonNull Book book) {
         if (!id.equals(book.id()))
             throw new IllegalArgumentException("updateBook( id:%s, book:{ id:%s } ) -> given Id and Id of book are different".formatted(id, book.id()));
@@ -28,4 +32,3 @@ public class LibraryService {
         return libraryRepository.save(book);
     }
 }
-

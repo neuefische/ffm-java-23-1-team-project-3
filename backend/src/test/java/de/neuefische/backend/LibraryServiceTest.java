@@ -65,6 +65,16 @@ class LibraryServiceTest {
 	}
 
 	@Test
+	void deleteBook() {
+
+		Book b1 = new Book("1", "My new book", "Me");
+
+		doThrow(NullPointerException.class).when(libraryRepository).deleteById(b1.id());
+
+		assertThrows(NullPointerException.class, () -> libraryRepository.deleteById(b1.id()));
+	}
+
+	@Test
 	void whenUpdateProduct_getsInvalidIDs_throwException() {
 		// Given
 		String id = "456";

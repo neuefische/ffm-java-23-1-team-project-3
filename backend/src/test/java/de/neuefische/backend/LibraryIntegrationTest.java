@@ -8,8 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -17,6 +16,9 @@ public class LibraryIntegrationTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	 LibraryRepository libraryRepository;
 
 	@Test
 	@DirtiesContext
@@ -34,5 +36,48 @@ public class LibraryIntegrationTest {
 				.andExpect(content().json("[]"));
 	}
 
+	@Test
+	@DirtiesContext
+	void getBookByID_ifFound() throws Exception {
+		//GIVEN
+		String id= "1";
+		Book book = new Book(id,"title 1","author 1");
+		libraryRepository.save(book);
+		//WHEN
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/books/"+ id))
+
+
+				//THEN
+				.andExpect(status().isOk())
+				.andExpect(content().json("""
+                        
+                          {
+                          "id": "1",
+                          "title": "title 1",
+                          "author": "author 1"
+                          }
+
+                        
+"""));
+
+	}
+
+	/*@Test
+	@DirtiesContext
+	void getBookByID_ifNotFound() throws Exception {
+		//GIVEN
+		String id= "3";
+		//WHEN
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/books/"+ id))
+
+
+				//THEN
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.error").value("Buch nicht gefunden"));
+
+
+	}
+*/
 
 }
+

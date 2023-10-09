@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,17 @@ public class LibraryService {
     }
 
     public Book getBookById(String id) {
-       return libraryRepository.findById(id).orElseThrow();
+
+        Optional<Book> optionalBook = libraryRepository.findById(id);
+        if(optionalBook.isPresent()){
+            return optionalBook.get();
+        } else {
+            throw new NoSuchElementException("Buch nicht gefunden");
+        }
+
     }
+
+
+
+
 }

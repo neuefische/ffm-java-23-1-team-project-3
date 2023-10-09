@@ -1,0 +1,11 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 75" width="180" height="150">
+    <defs>
+        <style>
+            @font-face {
+            font-family: "Virgil";
+            src: url("https://excalidraw.com/Virgil.woff2");
+            }
+        </style>
+
+    </defs>
+    <g><text x="0" y="-10" font-family="Virgil, Segoe UI Emoji" font-size="90px" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="text-before-edge">📖</text></g></svg>

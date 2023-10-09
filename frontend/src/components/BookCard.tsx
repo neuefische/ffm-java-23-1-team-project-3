@@ -1,5 +1,4 @@
 import {Book} from "../Types.tsx";
-import {Link} from "react-router-dom";
 
 type Props = {
     book: Book

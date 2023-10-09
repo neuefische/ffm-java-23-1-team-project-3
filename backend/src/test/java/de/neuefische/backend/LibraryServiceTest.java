@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -60,5 +62,35 @@ class LibraryServiceTest {
 		);
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	void findBookById_Exist() {
+		//GIVEN
+		String id = "12";
+		Book book12 = new Book(id,"title 12","author 12");
+
+		when(libraryRepository.findById(id)).thenReturn(Optional.of(book12));
+
+		//WHEN
+		Book actual = libraryService.getBookById(id);
+
+		//THEN
+		Book expected = new Book("12","title 12","author 12");
+		verify(libraryRepository).findById(id);
+		assertEquals(expected,actual);
+	}
+
+	@Test
+	void findBookById_NotExist(){
+		//GIVEN
+		String id ="33";
+		Book book = new Book("33","title 33","author 33");
+
+		when(libraryRepository.findById(id)).thenReturn(Optional.empty());
+		//WHEN
+		//THEN
+		assertThrows(NoSuchElementException.class, ()->libraryService.getBookById(id));
+	}
+
 
 }

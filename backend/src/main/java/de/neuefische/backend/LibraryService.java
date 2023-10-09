@@ -25,6 +25,8 @@ public class LibraryService {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
 
+        //return libraryRepository.findById(id).orElseThrow();
+
     }
 
 

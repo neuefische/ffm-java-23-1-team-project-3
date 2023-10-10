@@ -62,9 +62,9 @@ public class LibraryIntegrationTest {
 
 	}
 
-	/*@Test
+	@Test
 	@DirtiesContext
-	void getBookByID_ifNotFound() throws Exception {
+	void getBookByID_ifNotFound_handleNoSuchElementException() throws Exception {
 		//GIVEN
 		String id= "3";
 		//WHEN
@@ -73,11 +73,14 @@ public class LibraryIntegrationTest {
 
 				//THEN
 				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.error").value("Buch nicht gefunden"));
+				.andExpect(content().json("""
+      {"error":  "This book is not available.. Buch nicht gefunden"}
+"""));
 
 
 	}
-*/
+
+
 
 }
 

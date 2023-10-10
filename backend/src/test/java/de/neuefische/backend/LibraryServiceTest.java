@@ -84,7 +84,6 @@ class LibraryServiceTest {
 	void findBookById_NotExist(){
 		//GIVEN
 		String id ="33";
-		Book book = new Book("33","title 33","author 33");
 
 		when(libraryRepository.findById(id)).thenReturn(Optional.empty());
 		//WHEN

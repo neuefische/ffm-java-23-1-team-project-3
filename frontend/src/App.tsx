@@ -30,7 +30,7 @@ export default function App() {
 
             <Routes>
 
-                <Route path={`/books/:id`} element={<BookDetails books={books} />} />
+                <Route path={`/books/:id`} element={<BookDetails />} />
                 <Route path={"/books"} element={<BookList books={books}/>}/>
 
             </Routes>

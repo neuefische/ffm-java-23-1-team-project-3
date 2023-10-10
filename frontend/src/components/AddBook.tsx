@@ -1,14 +1,15 @@
 import {ChangeEvent, FormEvent, useState} from "react";
 import {Book} from "../Types.tsx";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
-
-export default function AddBook() {
-
-    const [title, setTitle] = useState<string>();
-    const [author, setAuthor] = useState<string>();
-
-
+type Props ={
+    onItemChange: () => void
+}
+export default function AddBook(props: Props) {
+    const [title, setTitle] = useState<string>("");
+    const [author, setAuthor] = useState<string>("");
+    const navigate = useNavigate();
     function addTitle(title: ChangeEvent<HTMLInputElement>){
         setTitle(title.target.value);
     }
@@ -16,12 +17,17 @@ export default function AddBook() {
         setAuthor(author.target.value);
     }
     function saveNewBook(event: FormEvent<HTMLFormElement>){
-        //event.preventDefault();
-
+        event.preventDefault();
         axios.post("/api/books",{
             title: title,
             author: author
         } as Book)
+            .then(()=>{
+                setTitle("");
+                setAuthor("");
+                props.onItemChange();
+            })
+        navigate("/");
     }
 
     return (

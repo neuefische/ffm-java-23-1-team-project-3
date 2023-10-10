@@ -25,14 +25,16 @@ export default function App() {
 
     return (
         <>
-            <Routes>
-                <Route path={"/books/add"} element={<AddBook/>}/>
-            </Routes>
             <h1>Book Library</h1>
             <nav>
+                <button><Link to={"/"}>Overview</Link></button>
                 <button><Link to={"/books/add"}>Add</Link></button>
             </nav>
-            <BookList books={books}/>
+
+            <Routes>
+                <Route path={"/"} element={<BookList books={books}/>}/>
+                <Route path={"/books/add"} element={<AddBook onItemChange={loadAllBooks}/>}/>
+            </Routes>
         </>
     )
 }

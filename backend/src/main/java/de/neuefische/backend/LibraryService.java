@@ -31,4 +31,14 @@ public class LibraryService {
 
         return libraryRepository.save(book);
     }
+
+    public Book addBook(Book newBook) {
+
+        Book book = new Book(
+                null,
+                newBook.title(),
+                newBook.author()
+        );
+        return libraryRepository.save(book);
+    }
 }

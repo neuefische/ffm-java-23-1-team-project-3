@@ -122,4 +122,19 @@ class LibraryServiceTest {
 		assertEquals(expected, actual);
 	}
 
+	@Test
+	void addBook() {
+		//GIVEN
+		when(libraryRepository.save(
+				new Book(null,"Title6","Author6"))).thenReturn(
+				new Book("128","Title6","Author6"));
+
+		//WHEN
+		Book actual = libraryService.addBook(new Book("12345678","Title6","Author6"));
+
+		//THEN
+		Book expected = new Book("128","Title6","Author6");
+		verify(libraryRepository).save(new Book(null,"Title6","Author6"));
+		assertEquals(expected, actual);
+	}
 }

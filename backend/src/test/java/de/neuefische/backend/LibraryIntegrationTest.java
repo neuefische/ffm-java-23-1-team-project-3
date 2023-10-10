@@ -9,8 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -70,13 +69,28 @@ public class LibraryIntegrationTest {
 	void removeBookTest() throws Exception {
 		// Given
 		libraryRepository.save(new Book("1", "My new book", "Me"));
-
 		// When
 		mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/1"))
 				// Then
 				.andExpect(status().isOk());
 	}
 
+    @Test
+    @DirtiesContext
+    void whenAddBooks_getsNewBooks_returnsBooks() throws Exception {
+        // Given
+        // When
+        mockMvc
+                .perform(MockMvcRequestBuilders
+                        .post("/api/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"title\":\"Title 1\", \"author\": \"Author1\"}")
+                )
+                // Then
+                .andExpect(status().isCreated())
+                .andExpect(content().json("{ \"title\":\"Title 1\", \"author\": \"Author1\" }"))
+                .andExpect(jsonPath("$.id").isString());
+    }
 
 	@Test
 	@DirtiesContext

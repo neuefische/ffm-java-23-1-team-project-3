@@ -19,6 +19,10 @@ public class LibraryController {
         return libraryService.getAllBooks();
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Book addBook(@RequestBody Book newBook){return libraryService.addBook(newBook);}
+
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable String id) {
         libraryService.removeBook(id);
@@ -42,6 +46,5 @@ public class LibraryController {
         System.err.printf("NoSuchElementException: %s%n", ex.getMessage());
         return new ErrorMessage("NoSuchElementException: %s".formatted(ex.getMessage()));
     }
+
 }
-
-

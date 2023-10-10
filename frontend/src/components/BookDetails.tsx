@@ -1,5 +1,5 @@
 import {Book} from "../Types.tsx";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ export default function BookDetails(){
     const [book, setBook] = useState<Book>();
     const navigate = useNavigate();
 
-    useEffect(loadAllBooks, []);
+    useEffect(loadAllBooks, [urlParams.id]);
     function loadAllBooks (){
         axios.get("/api/books/"+ urlParams.id)
             .then((response) => {

@@ -1,5 +1,5 @@
 import {Book} from "../Types.tsx";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ export default function BookDetails(){
     const urlParams = useParams()
 
     const [book, setBook] = useState<Book>();
+    const navigate = useNavigate();
 
     useEffect(loadAllBooks, []);
     function loadAllBooks (){
@@ -38,9 +39,8 @@ export default function BookDetails(){
                 }
 
             </div>
-            <Link to={"/books"}>
-                <button >Home page</button>
-            </Link>
+                <button onClick={()=>navigate("/")}>Home page</button>
+
         </>
     );
 

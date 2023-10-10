@@ -10,7 +10,7 @@ import BookDetails from "./components/BookDetails.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
-    const navigate = useNavigate();
+
 
     useEffect(loadAllBooks, []);
 
@@ -30,9 +30,7 @@ export default function App() {
     return (
         <>
             <h1>Book Library</h1>
-            <nav>
-                <button onClick={()=>navigate("/books/add")}>Add</button>
-            </nav>
+
 
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />

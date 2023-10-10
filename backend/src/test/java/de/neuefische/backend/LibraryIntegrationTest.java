@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -25,7 +24,6 @@ public class LibraryIntegrationTest {
 	@DirtiesContext
 	void whenGetAllBooks_performsOnEmptyRepo_returnsEmptyJsonArray() throws Exception {
 		// Given
-
 		// When
 		mockMvc
 				.perform(MockMvcRequestBuilders
@@ -37,6 +35,39 @@ public class LibraryIntegrationTest {
 				.andExpect(content().json("[]"));
 	}
 
+    @Test
+    @DirtiesContext
+    void getBookByID_ifFound() throws Exception {
+        //GIVEN
+        String id= "1";
+        Book book = new Book(id,"title 1","author 1");
+        libraryRepository.save(book);
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/"+ id))
+                //THEN
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                          {
+                          "id": "1",
+                          "title": "title 1",
+                          "author": "author 1"
+                          }
+
+                        
+"""));
+    }
+
+    @Test
+    @DirtiesContext
+    void getBookByID_ifNotFound_handleNoSuchElementException() throws Exception {
+        //GIVEN
+        String id= "3";
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/"+ id))
+                //THEN
+                .andExpect(status().isNotFound());
+    }
+
 	@Test
 	@DirtiesContext
 	void whenGetAllBooks_performsOnFilledRepo_returnsRepoContent() throws Exception {
@@ -45,13 +76,11 @@ public class LibraryIntegrationTest {
 		libraryRepository.save(new Book("id2", "Title 2", "Author 2"));
 		libraryRepository.save(new Book("id3", "Title 3", "Author 3"));
 		libraryRepository.save(new Book("id4", "Title 4", "Author 4"));
-
 		// When
 		mockMvc
 				.perform(MockMvcRequestBuilders
 						.get("/api/books")
 				)
-
 				// Then
 				.andExpect(status().isOk())
 				.andExpect(content().json("""

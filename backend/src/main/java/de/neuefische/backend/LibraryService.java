@@ -41,4 +41,17 @@ public class LibraryService {
         );
         return libraryRepository.save(book);
     }
+
+    public Book getBookById(String id) {
+
+        Optional<Book> optionalBook = libraryRepository.findById(id);
+        if(optionalBook.isPresent()){
+            return optionalBook.get();
+        } else {
+            throw new NoSuchElementException("Buch nicht gefunden");
+        }
+    }
+
+
+
 }

@@ -19,6 +19,11 @@ public class LibraryController {
         return libraryService.getAllBooks();
     }
 
+    @GetMapping("/{id}")
+    public Book getBookByID(@PathVariable String id){
+        return libraryService.getBookById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book addBook(@RequestBody Book newBook){return libraryService.addBook(newBook);}

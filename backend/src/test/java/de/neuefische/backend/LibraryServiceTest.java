@@ -65,6 +65,35 @@ class LibraryServiceTest {
 	}
 
 	@Test
+	void findBookById_Exist() {
+		//GIVEN
+		String id = "12";
+		Book book12 = new Book(id,"title 12","author 12");
+
+		when(libraryRepository.findById(id)).thenReturn(Optional.of(book12));
+
+		//WHEN
+		Book actual = libraryService.getBookById(id);
+
+		//THEN
+		Book expected = new Book("12","title 12","author 12");
+		verify(libraryRepository).findById(id);
+		assertEquals(expected,actual);
+	}
+
+	@Test
+	void findBookById_NotExist(){
+		//GIVEN
+		String id ="33";
+
+		when(libraryRepository.findById(id)).thenReturn(Optional.empty());
+		//WHEN
+		//THEN
+		assertThrows(NoSuchElementException.class, ()->libraryService.getBookById(id));
+	}
+
+
+	@Test
 	void deleteBook() {
 
 		Book b1 = new Book("1", "My new book", "Me");

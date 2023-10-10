@@ -24,11 +24,32 @@ public class LibraryController {
         return libraryService.getBookById(id);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Book addBook(@RequestBody Book newBook){return libraryService.addBook(newBook);}
+
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable String id) {
+        libraryService.removeBook(id);
+    }
+
+    @PutMapping("/{id}")
+    public Book updateBook(@PathVariable String id, @RequestBody Book book){
+        return libraryService.updateBook(id, book);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleIllegalArgumentException(IllegalArgumentException ex) {
+        System.err.printf("IllegalArgumentException: %s%n", ex.getMessage());
+        return new ErrorMessage("IllegalArgumentException: %s".formatted(ex.getMessage()));
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorMessage handleNoSuchElementException(NoSuchElementException ex) {
-        return new ErrorMessage("This book is not available.. " + ex.getMessage());
+        System.err.printf("NoSuchElementException: %s%n", ex.getMessage());
+        return new ErrorMessage("NoSuchElementException: %s".formatted(ex.getMessage()));
     }
-
 
 }

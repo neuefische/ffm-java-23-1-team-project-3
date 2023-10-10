@@ -1,6 +1,7 @@
 package de.neuefische.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,31 @@ public class LibraryService {
         return libraryRepository.findAll();
     }
 
+    public void removeBook(String id) {
+        libraryRepository.deleteById(id);
+    }
+
+    public Book updateBook(@NonNull String id, @NonNull Book book) {
+        if (!id.equals(book.id()))
+            throw new IllegalArgumentException("updateBook( id:%s, book:{ id:%s } ) -> given Id and Id of book are different".formatted(id, book.id()));
+
+        Optional<Book> existingBook = libraryRepository.findById(id);
+        if (existingBook.isEmpty())
+            throw new NoSuchElementException("updateBook( id:%s, book:{ id:%s } ) -> Can't find a book with Id \"%s\"".formatted(id, book.id(), book.id()));
+
+        return libraryRepository.save(book);
+    }
+
+    public Book addBook(Book newBook) {
+
+        Book book = new Book(
+                null,
+                newBook.title(),
+                newBook.author()
+        );
+        return libraryRepository.save(book);
+    }
+
     public Book getBookById(String id) {
 
         Optional<Book> optionalBook = libraryRepository.findById(id);
@@ -24,9 +50,6 @@ public class LibraryService {
         } else {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
-
-     //        return libraryRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Buch nicht gefunden"));
-
     }
 
 

@@ -2,6 +2,7 @@ package de.neuefische.backend;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -92,4 +93,77 @@ class LibraryServiceTest {
 	}
 
 
+	@Test
+	void deleteBook() {
+
+		Book b1 = new Book("1", "My new book", "Me");
+
+		doThrow(NullPointerException.class).when(libraryRepository).deleteById(b1.id());
+
+		assertThrows(NullPointerException.class, () -> libraryRepository.deleteById(b1.id()));
+	}
+
+	@Test
+	void whenUpdateProduct_getsInvalidIDs_throwException() {
+		// Given
+		String id = "456";
+		String bookId = "457";
+
+		// When
+		Executable executable = () -> libraryService.updateBook(id, new Book(bookId, "Title 1", "Author 1"));
+
+		// Then
+		assertThrows(IllegalArgumentException.class, executable);
+	}
+
+	@Test
+	void whenUpdateProduct_getsUnknownID_throwException() {
+		// Given
+		when(libraryRepository.findById("456")).thenReturn(
+				Optional.empty()
+		);
+
+		// When
+		Executable executable = () -> libraryService.updateBook("456", new Book("456", "Title 1", "Author 1"));
+
+		// Then
+		assertThrows(NoSuchElementException.class, executable);
+		verify(libraryRepository).findById("456");
+	}
+
+	@Test
+	void whenUpdateProduct_getsValidID_returnsChangedBook() {
+		// Given
+		when(libraryRepository.findById("456")).thenReturn(
+				Optional.of(new Book("456", "Title A", "Author A"))
+		);
+		when(libraryRepository.save(new Book("456", "Title 1", "Author 1"))).thenReturn(
+				new Book("456", "Title 1", "Author 1")
+		);
+
+		// When
+		Book actual = libraryService.updateBook("456", new Book("456", "Title 1", "Author 1"));
+
+		// Then
+		verify(libraryRepository).findById("456");
+		verify(libraryRepository).save(new Book("456", "Title 1", "Author 1"));
+		Book expected = new Book("456", "Title 1", "Author 1");
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void addBook() {
+		//GIVEN
+		when(libraryRepository.save(
+				new Book(null,"Title6","Author6"))).thenReturn(
+				new Book("128","Title6","Author6"));
+
+		//WHEN
+		Book actual = libraryService.addBook(new Book("12345678","Title6","Author6"));
+
+		//THEN
+		Book expected = new Book("128","Title6","Author6");
+		verify(libraryRepository).save(new Book(null,"Title6","Author6"));
+		assertEquals(expected, actual);
+	}
 }

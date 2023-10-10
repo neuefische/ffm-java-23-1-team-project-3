@@ -1,10 +1,11 @@
 import './App.css';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
 import {Routes, Route, Link} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
+import EditBook from "./components/EditBook.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -32,8 +33,9 @@ export default function App() {
             </nav>
 
             <Routes>
-                <Route path={"/"} element={<BookList books={books}/>}/>
-                <Route path={"/books/add"} element={<AddBook onItemChange={loadAllBooks}/>}/>
+                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit" element={<EditBook books={books} reload={loadAllBooks}/>}/>
             </Routes>
         </>
     )

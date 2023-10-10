@@ -36,6 +36,7 @@ export default function AddBook(props: Props) {
                 <input value={title} onChange={addTitle}/>
                 <input value={author} onChange={addAuthor}/>
                 <button>Add New Book</button>
+                <button type="button" onClick={()=>navigate("/")}>cancel</button>
             </form>
         </>
     )

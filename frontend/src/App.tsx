@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
+import {Route, Routes} from "react-router-dom";
+import EditBook from "./components/EditBook.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -25,7 +27,10 @@ export default function App() {
     return (
         <>
             <h1>Book Library</h1>
-            <BookList books={books} onItemChange={loadAllBooks}/>
+            <Routes>
+                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit" element={<EditBook books={books} reload={loadAllBooks}/>}/>
+            </Routes>
         </>
     )
 }

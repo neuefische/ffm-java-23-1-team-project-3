@@ -1,0 +1,4 @@
+.EditBookForm {
+    display: flex;
+    flex-direction: column;
+}

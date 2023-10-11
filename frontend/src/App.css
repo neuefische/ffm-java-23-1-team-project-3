@@ -1,15 +1,44 @@
+
 .BookList {
     display: flex;
     flex-wrap: wrap;
 }
 
 .BookCard {
-    border: 1px solid black;
-    border-radius: 5px;
+    //border: 1px solid #2C3359;
+    //border-radius: 2px;
     padding: 1em;
     margin: 0.5em;
+    background-color: #fff;
+    min-width: 300px;
 }
 
-form{
-    margin: 2em 0;
+.BookCard a{
+    color: #2C3359;
+    text-decoration: none;
 }
+
+.addForm{
+    margin: 2em 0;
+    max-width: 800px;
+}
+
+button {
+    //border-radius: 2px;
+    border: 1px solid #75B8BF;
+    padding: 0.6em 1.2em;
+    margin-right: 1em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+button:hover {
+    border-color: #2C3359;
+}
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+

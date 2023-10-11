@@ -32,12 +32,16 @@ export default function AddBook(props: Props) {
 
     return (
         <>
-            <form onSubmit={saveNewBook}>
-                <input value={title} onChange={addTitle}/>
-                <input value={author} onChange={addAuthor}/>
-                <button>Add New Book</button>
-                <button type="button" onClick={()=>navigate("/")}>cancel</button>
-            </form>
+            <div className="addForm">
+                <form onSubmit={saveNewBook}>
+                    Title:
+                    <input value={title} onChange={addTitle}/>
+                    Author:
+                    <input value={author} onChange={addAuthor}/>
+                    <button>Add New Book</button>
+                    <button type="button" onClick={()=>navigate("/")}>Cancel</button>
+                </form>
+            </div>
         </>
     )
 }

@@ -10,6 +10,7 @@ import BookDetails from "./components/BookDetails.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
+    const [timestamp, setTimestamp] = useState<string>("");
 
     useEffect(loadAllBooks, []);
 
@@ -19,6 +20,8 @@ export default function App() {
                 if (response.status!==200)
                     throw "Get wrong response status, when loading all books: "+response.status;
                 setBooks(response.data.books);
+                if (!response.data.timestamp) setTimestamp("");
+                else setTimestamp(response.data.timestamp.timestamp);
             })
             .catch((error)=>{
                 console.error(error);
@@ -28,6 +31,7 @@ export default function App() {
     return (
         <>
             <h1>Book Library</h1>
+            <code>{timestamp}</code>
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />
                 <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>

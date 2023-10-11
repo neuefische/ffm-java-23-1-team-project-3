@@ -49,7 +49,6 @@ export default function App() {
     return (
         <>
             <h1>Book Library</h1>
-            <code>[DEBUG] {timestamp} [DEBUG]</code>
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />
                 <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>

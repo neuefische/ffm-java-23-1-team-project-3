@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 public class LibraryController {
 
     private final LibraryService libraryService;
+    private final TimestampService timestampService;
 
     @GetMapping
     public DatedBookList allBooks(){
@@ -35,6 +36,11 @@ public class LibraryController {
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable String id, @RequestBody Book book){
         return libraryService.updateBook(id, book);
+    }
+
+    @GetMapping("/state")
+    public Timestamp getTimestampOfDB(){
+        return timestampService.getCurrentTimestamp();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

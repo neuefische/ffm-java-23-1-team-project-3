@@ -11,13 +11,12 @@ export default function BookDetails(){
     const [book, setBook] = useState<Book>();
     const navigate = useNavigate();
 
-    useEffect(loadAllBooks, [urlParams.id]);
-    function loadAllBooks (){
+    useEffect(loadBook, [urlParams.id]);
+    function loadBook (){
         axios.get("/api/books/"+ urlParams.id)
             .then((response) => {
                 if (response.status!==200)
-                    throw "Get wrong response status, when loading the book: "+response.status;
-
+                    throw new Error("Get wrong response status, when loading the book: "+response.status);
              setBook(response.data)
             })
             .catch((error)=>{

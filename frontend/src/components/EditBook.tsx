@@ -61,7 +61,7 @@ function EditBookForm( props: FormProps ) {
             .put('/api/books/'+book.id, book )
             .then(response => {
                 if (response.status != 200)
-                    throw {error: "Got wrong status on update book: " + response.status}
+                    throw new Error("Got wrong status on update book: " + response.status);
                 props.reload()
             })
             .catch(reason => {

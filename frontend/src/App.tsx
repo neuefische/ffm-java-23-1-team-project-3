@@ -18,7 +18,7 @@ export default function App() {
         axios.get("/api/books")
             .then((response) => {
                 if (response.status!==200)
-                    throw "Get wrong response status, when loading all books: "+response.status;
+                    throw new Error("Get wrong response status, when loading all books: "+response.status);
                 setBooks(response.data);
             })
             .catch((error)=>{

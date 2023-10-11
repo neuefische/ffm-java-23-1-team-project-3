@@ -22,13 +22,11 @@ class LibraryIntegrationTest {
 	@Autowired
 	private TimestampRepository timestampRepository;
 
-
 	@Test
 	@DirtiesContext
 	void whenGetAllBooks_performsOnEmptyRepo_returnsEmptyJsonArray() throws Exception {
 		// Given
-		Timestamp now = new Timestamp("test", "<TestTimestamp>");
-		timestampRepository.save(now);
+		timestampRepository.save(new Timestamp("test", "<TestTimestamp>"));
 
 		// When
 		mockMvc
@@ -92,8 +90,7 @@ class LibraryIntegrationTest {
 		libraryRepository.save(new Book("id2", "Title 2", "Author 2"));
 		libraryRepository.save(new Book("id3", "Title 3", "Author 3"));
 		libraryRepository.save(new Book("id4", "Title 4", "Author 4"));
-		Timestamp now = new Timestamp("test", "<TestTimestamp>");
-		timestampRepository.save(now);
+		timestampRepository.save(new Timestamp("test", "<TestTimestamp>"));
 
 		// When
 		mockMvc
@@ -224,6 +221,41 @@ class LibraryIntegrationTest {
 				.andExpect(status().isOk())
 				.andExpect(content().json("""
 					{ "id": "id1", "title": "Title 1B", "author": "Author 1B" }
+				"""));
+	}
+
+	@Test
+	@DirtiesContext
+	void whenGetTimestampOfDB_isCalledOnEmptyTimestampRepo_returnsNothing() throws Exception {
+		// Given
+
+		// When
+		mockMvc
+				.perform(MockMvcRequestBuilders
+						.get("/api/books/state")
+				)
+
+				// Then
+				.andExpect(status().isOk())
+				.andExpect(content().string(""));
+	}
+
+	@Test
+	@DirtiesContext
+	void whenGetTimestampOfDB_isCalledOnNormalTimestampRepo_returnsTimestamp() throws Exception {
+		// Given
+		timestampRepository.save(new Timestamp("test", "<TestTimestamp>"));
+
+		// When
+		mockMvc
+				.perform(MockMvcRequestBuilders
+						.get("/api/books/state")
+				)
+
+				// Then
+				.andExpect(status().isOk())
+				.andExpect(content().json("""
+					{ "id": "test", "timestamp": "<TestTimestamp>" }
 				"""));
 	}
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -15,7 +14,7 @@ public class LibraryController {
     private final LibraryService libraryService;
 
     @GetMapping
-    public List<Book> allBooks(){
+    public DatedBookList allBooks(){
         return libraryService.getAllBooks();
     }
 

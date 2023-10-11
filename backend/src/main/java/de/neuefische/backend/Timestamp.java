@@ -2,8 +2,8 @@ package de.neuefische.backend;
 
 import java.time.ZonedDateTime;
 
-public record Timestamp(ZonedDateTime timestamp) {
+public record Timestamp(String timestamp) {
 	public static Timestamp now() {
-		return new Timestamp( ZonedDateTime.now() );
+		return new Timestamp( ZonedDateTime.now().toString() );
 	}
 }

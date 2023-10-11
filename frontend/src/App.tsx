@@ -11,7 +11,6 @@ import BookDetails from "./components/BookDetails.tsx";
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
 
-
     useEffect(loadAllBooks, []);
 
     function loadAllBooks (){
@@ -19,19 +18,16 @@ export default function App() {
             .then((response) => {
                 if (response.status!==200)
                     throw "Get wrong response status, when loading all books: "+response.status;
-                setBooks(response.data);
+                setBooks(response.data.books);
             })
             .catch((error)=>{
                 console.error(error);
             })
     }
 
-
     return (
         <>
             <h1>Book Library</h1>
-
-
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />
                 <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>

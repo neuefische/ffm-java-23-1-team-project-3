@@ -15,12 +15,8 @@ export default function App() {
 
     useEffect(loadAllBooks, []);
     useEffect(() => {
-        console.debug(`App: Start RefreshCheckLoop    ( timestamp:"${timestamp}" )`);
         const intervalID = setInterval(checkIfUpdateNeeded, 3000);
-        return () => {
-            clearInterval(intervalID);
-            console.debug(`App: RefreshCheckLoop finished ( timestamp:"${timestamp}" )`);
-        }
+        return () => clearInterval(intervalID);
     }, [ timestamp ]);
 
     function loadAllBooks (){
@@ -28,7 +24,6 @@ export default function App() {
             .then((response) => {
                 if (response.status!==200)
                     throw new Error("Get wrong response status, when loading all books: "+response.status);
-                console.debug(`App: loadAllBooks`);
                 setBooks(response.data.books);
                 if (!response.data.timestamp) setTimestamp("");
                 else setTimestamp(response.data.timestamp.timestamp);
@@ -39,15 +34,12 @@ export default function App() {
     }
 
     function checkIfUpdateNeeded() {
-        console.debug(`App: check if reload is needed ( timestamp:"${timestamp}" )`);
         axios.get("/api/books/state")
             .then((response) => {
                 if (response.status!==200)
                     throw new Error("Get wrong response status, when getting database timestamp: "+response.status);
-                if (response.data && timestamp!==response.data.timestamp) {
-                    console.debug(`App: reload needed\r\n   old: "${timestamp}"\r\n   new: "${response.data.timestamp}"`);
+                if (response.data && timestamp!==response.data.timestamp)
                     loadAllBooks();
-                }
             })
             .catch((error)=>{
                 console.error(error);

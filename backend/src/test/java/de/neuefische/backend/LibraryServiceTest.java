@@ -48,12 +48,12 @@ class LibraryServiceTest {
 	void whenGetAllBooks_calledWithNonEmptyRepo_returnListOfRepoContent() {
 		// Given
 		when(libraryRepository.findAll()).thenReturn(List.of(
-				new Book("123","Title1","Author1"),
-				new Book("124","Title2","Author2"),
-				new Book("125","Title3","Author3"),
-				new Book("126","Title4","Author4"),
-				new Book("127","Title5","Author5"),
-				new Book("128","Title6","Author6")
+				new Book("123", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"),
+				new Book("124", "Title2", "Author2", "Desc2", "Publisher2", "ISBN2", "URL2"),
+				new Book("125", "Title3", "Author3", "Desc3", "Publisher3", "ISBN3", "URL3"),
+				new Book("126", "Title4", "Author4", "Desc4", "Publisher4", "ISBN4", "URL4"),
+				new Book("127", "Title5", "Author5", "Desc5", "Publisher5", "ISBN5", "URL5"),
+				new Book("128", "Title6", "Author6", "Desc6", "Publisher6", "ISBN6", "URL6")
 		));
 		when(timestampService.getCurrentTimestamp()).thenReturn(new Timestamp("test", "<TestTimestamp>"));
 
@@ -66,12 +66,12 @@ class LibraryServiceTest {
 
 		DatedBookList expected = new DatedBookList(
 				List.of(
-						new Book("123","Title1","Author1"),
-						new Book("124","Title2","Author2"),
-						new Book("125","Title3","Author3"),
-						new Book("126","Title4","Author4"),
-						new Book("127","Title5","Author5"),
-						new Book("128","Title6","Author6")
+						new Book("123", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"),
+						new Book("124", "Title2", "Author2", "Desc2", "Publisher2", "ISBN2", "URL2"),
+						new Book("125", "Title3", "Author3", "Desc3", "Publisher3", "ISBN3", "URL3"),
+						new Book("126", "Title4", "Author4", "Desc4", "Publisher4", "ISBN4", "URL4"),
+						new Book("127", "Title5", "Author5", "Desc5", "Publisher5", "ISBN5", "URL5"),
+						new Book("128", "Title6", "Author6", "Desc6", "Publisher6", "ISBN6", "URL6")
 				),
 				new Timestamp("test", "<TestTimestamp>")
 		);
@@ -82,7 +82,7 @@ class LibraryServiceTest {
 	void findBookById_Exist() {
 		//GIVEN
 		String id = "12";
-		Book book12 = new Book(id,"title 12","author 12");
+		Book book12 = new Book(id, "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1");
 
 		when(libraryRepository.findById(id)).thenReturn(Optional.of(book12));
 
@@ -90,7 +90,7 @@ class LibraryServiceTest {
 		Book actual = libraryService.getBookById(id);
 
 		//THEN
-		Book expected = new Book("12","title 12","author 12");
+		Book expected = new Book("12", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1");
 		verify(libraryRepository).findById(id);
 		assertEquals(expected,actual);
 	}
@@ -126,7 +126,7 @@ class LibraryServiceTest {
 		String bookId = "457";
 
 		// When
-		Executable executable = () -> libraryService.updateBook(id, new Book(bookId, "Title 1", "Author 1"));
+		Executable executable = () -> libraryService.updateBook(id, new Book(bookId, "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 
 		// Then
 		assertThrows(IllegalArgumentException.class, executable);
@@ -140,7 +140,7 @@ class LibraryServiceTest {
 		);
 
 		// When
-		Executable executable = () -> libraryService.updateBook("456", new Book("456", "Title 1", "Author 1"));
+		Executable executable = () -> libraryService.updateBook("456", new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 
 		// Then
 		assertThrows(NoSuchElementException.class, executable);
@@ -151,37 +151,36 @@ class LibraryServiceTest {
 	void whenUpdateProduct_getsValidID_returnsChangedBook() {
 		// Given
 		when(libraryRepository.findById("456")).thenReturn(
-				Optional.of(new Book("456", "Title A", "Author A"))
+				Optional.of(new Book("456", "TitleA", "AuthorA", "DescA", "PublisherA", "ISBN A", "URL A"))
 		);
-		when(libraryRepository.save(new Book("456", "Title 1", "Author 1"))).thenReturn(
-				new Book("456", "Title 1", "Author 1")
+		when(libraryRepository.save(new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"))).thenReturn(
+				new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1")
 		);
 
 		// When
-		Book actual = libraryService.updateBook("456", new Book("456", "Title 1", "Author 1"));
+		Book actual = libraryService.updateBook("456", new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 
 		// Then
 		verify(libraryRepository).findById("456");
-		verify(libraryRepository).save(new Book("456", "Title 1", "Author 1"));
+		verify(libraryRepository).save(new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 		verify(timestampService).setTimestampToNow();
-		Book expected = new Book("456", "Title 1", "Author 1");
+		Book expected = new Book("456", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1");
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	void addBook() {
 		//GIVEN
-		when(libraryRepository.save(
-				new Book(null,"Title6","Author6"))).thenReturn(
-				new Book("128","Title6","Author6"));
+		when(libraryRepository.save(new Book(null, "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1")))
+				.thenReturn(new Book("128", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 
 		//WHEN
-		Book actual = libraryService.addBook(new Book("12345678","Title6","Author6"));
+		Book actual = libraryService.addBook(new Book("12345678", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 
 		//THEN
-		verify(libraryRepository).save(new Book(null,"Title6","Author6"));
+		verify(libraryRepository).save(new Book(null, "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1"));
 		verify(timestampService).setTimestampToNow();
-		Book expected = new Book("128","Title6","Author6");
+		Book expected = new Book("128", "Title1", "Author1", "Desc1", "Publisher1", "ISBN1", "URL1");
 		assertEquals(expected, actual);
 	}
 }

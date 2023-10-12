@@ -11,6 +11,11 @@ export default function BookFavorites() {
     console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
 
     useEffect(loadBooks, []);
+    useEffect(() => {
+        const intervalID = setInterval(checkIfUpdateNeeded, 3000);
+        return () => clearInterval(intervalID);
+    }, [ timestamp ]);
+
     function loadBooks () {
         axios.get("/api/books")
             .then((response) => {

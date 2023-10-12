@@ -7,6 +7,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
+import TestUploadForm from "./components/TestUploadForm.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -54,6 +55,7 @@ export default function App() {
             <header>
                 {}
             </header>
+            <TestUploadForm/>
 
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />

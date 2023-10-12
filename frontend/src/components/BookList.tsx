@@ -11,11 +11,13 @@ export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
         <>
-            <nav>
-                <button onClick={()=>navigate("/books/add")}>Add</button>
-            </nav>
+
 
         <div className="BookList">
+            <button className="BookCard" onClick={()=>navigate("/books/add")}>
+                <h3>Add a new Book</h3>
+                <p>click here</p>
+            </button>
             {
                 props.books.map( book =>
                     <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>

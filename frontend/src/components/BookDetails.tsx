@@ -25,12 +25,11 @@ export default function BookDetails(){
     }
     return (
         <>
-            <div className={"BookCard"}>
+            <div className="bookDetails">
                 {book
                     ? <>
-                        <h2>Book Details</h2>
-                        <p>Title: {book.title}</p>
-                        <p>Author: {book.author}</p>
+                        <h3>{book.title}</h3>
+                        <p>Author: <br/>{book.author}</p>
                     </>
                     : <>
                         <p>Book not found</p>
@@ -38,7 +37,7 @@ export default function BookDetails(){
                 }
 
             </div>
-                <button onClick={()=>navigate("/")}>Home page</button>
+                <button className="backHomeBTN" onClick={()=>navigate("/")}>Back to Homepage</button>
 
         </>
     );

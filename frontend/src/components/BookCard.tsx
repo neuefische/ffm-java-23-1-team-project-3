@@ -18,12 +18,13 @@ export default function BookCard( props: Props ) {
     return (
         <div className="BookCard">
             <Link to={`/books/${props.book.id}`}>
-            <div>id     : {props.book.id     }</div>
-            <div>title  : {props.book.title  }</div>
-            <div>author : {props.book.author }</div>
+            {/*<div>id     : {props.book.id     }</div>*/}
+            <h3>{props.book.title  }</h3>
+            <p>{props.book.author }</p>
             </Link>
-            <button onClick={() => navigate("/books/"+props.book.id+"/edit")}>Edit</button>
-            <button onClick={deleteCard}>X</button>
+            <button onClick={() => navigate("/books/"+props.book.id+"/edit")}>✎</button>
+            <button onClick={deleteCard}>✖</button>
+            <div className="star"></div>
         </div>
     )
 }

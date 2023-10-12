@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Link} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
@@ -29,8 +29,11 @@ export default function App() {
 
     return (
         <>
-            <h1>Book Library</h1>
 
+            <Link to={`/`}><h1>Book Library</h1></Link>
+            <header>
+                {}
+            </header>
 
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />

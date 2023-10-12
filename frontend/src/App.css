@@ -2,6 +2,7 @@
 .BookList {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 1.5em;
 }
 
 .BookCard {
@@ -10,7 +11,6 @@
     padding: 1em;
     margin: 0.5em;
     background-color: #fff;
-    min-width: 300px;
 }
 
 .BookCard a{
@@ -18,27 +18,18 @@
     text-decoration: none;
 }
 
-.addForm{
-    margin: 2em 0;
-    max-width: 800px;
+.bookDetails{
+    padding: 1em 2em;
+    margin: 1.5em 2em;
+    background-color: #fff;
+}
+.backHomeBTN{
+    margin-left: 2em;
 }
 
-button {
-    //border-radius: 2px;
-    border: 1px solid #75B8BF;
-    padding: 0.6em 1.2em;
-    margin-right: 1em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
+.star{
     cursor: pointer;
-    transition: border-color 0.25s;
+    display: block;
+    transition: all .2s ease-in;
+    color: #000;
 }
-button:hover {
-    border-color: #2C3359;
-}
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-}
-

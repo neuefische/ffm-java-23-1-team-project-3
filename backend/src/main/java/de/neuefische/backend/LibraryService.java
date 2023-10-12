@@ -11,17 +11,22 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
+
     private final LibraryRepository libraryRepository;
+    private final TimestampService timestampService;
 
-    public List<Book> getAllBooks() {
-        return libraryRepository.findAll();
+    public synchronized DatedBookList getAllBooks() {
+        List<Book> books = libraryRepository.findAll();
+        Timestamp timestamp = timestampService.getCurrentTimestamp();
+        return new DatedBookList( books, timestamp );
     }
 
-    public void removeBook(String id) {
+    public synchronized void removeBook(String id) {
         libraryRepository.deleteById(id);
+        timestampService.setTimestampToNow();
     }
 
-    public Book updateBook(@NonNull String id, @NonNull Book book) {
+    public synchronized Book updateBook(@NonNull String id, @NonNull Book book) {
         if (!id.equals(book.id()))
             throw new IllegalArgumentException("updateBook( id:%s, book:{ id:%s } ) -> given Id and Id of book are different".formatted(id, book.id()));
 
@@ -29,17 +34,22 @@ public class LibraryService {
         if (existingBook.isEmpty())
             throw new NoSuchElementException("updateBook( id:%s, book:{ id:%s } ) -> Can't find a book with Id \"%s\"".formatted(id, book.id(), book.id()));
 
-        return libraryRepository.save(book);
+        Book saved = libraryRepository.save(book);
+        timestampService.setTimestampToNow();
+        return saved;
     }
 
-    public Book addBook(Book newBook) {
+    public synchronized Book addBook(Book newBook) {
 
         Book book = new Book(
                 null,
                 newBook.title(),
                 newBook.author()
         );
-        return libraryRepository.save(book);
+
+        Book saved = libraryRepository.save(book);
+        timestampService.setTimestampToNow();
+        return saved;
     }
 
     public Book getBookById(String id) {

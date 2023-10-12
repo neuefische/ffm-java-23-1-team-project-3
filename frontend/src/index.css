@@ -1,3 +1,74 @@
 body{
+  margin: 0;
+  padding: 0;
   font-family: sans-serif;
+  background-color: #F2EDE4;
+  color: #2C3359;
+}
+
+/* Colors
+white: #F2EDE4
+gold: #F2BE5C
+D Blue: #2C3359
+Blue: #75B8BF
+L Blue: #DAEDE2
+*/
+
+header{
+  margin: 1em 0;
+  height: 5px;
+  background: rgb(97,147,162);
+  background: radial-gradient(circle, rgba(97,147,162,1) 0%, rgba(44,51,89,1) 100%);
+}
+
+h1{
+  margin-left: 2em;
+}
+h2{
+  color: #DAEDE2;
+}
+
+
+form{
+  margin: 2em;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+input{
+  margin-bottom: 1.5em;
+  box-sizing: border-box;
+  padding: 0.8em;
+}
+label{
+  font-size: 10pt;
+  margin: 5px 6px;
+}
+form button, .backHomeBTN{
+  padding: 0.6em 1em;
+}
+
+button {
+/*border-radius: 2px;*/
+  border: 1px solid #75B8BF;
+  margin-right: 1em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  background-color: #fff;
+  transition: border-color 0.25s;
+  color: #2C3359;
+}
+button:hover {
+  border-color: #2C3359;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+a:link, a:hover, a:active, a:visited{
+  color: #2C3359;
+  text-decoration: none;
 }

@@ -61,7 +61,7 @@ function EditBookForm( props: FormProps ) {
             .put('/api/books/'+book.id, book )
             .then(response => {
                 if (response.status != 200)
-                    throw {error: "Got wrong status on update book: " + response.status}
+                    throw new Error("Got wrong status on update book: " + response.status);
                 props.reload()
             })
             .catch(reason => {
@@ -72,9 +72,11 @@ function EditBookForm( props: FormProps ) {
     return (
         <>
             <form className="EditBookForm" onSubmit={saveChanges}>
-                <label>id     : {book.id}</label>
-                <label>title  : <input name="title"  value={book.title } onChange={onChangeFcnI}/></label>
-                <label>author : <input name="author" value={book.author} onChange={onChangeFcnI}/></label>
+                {/*<label>id     : {book.id}</label>*/}
+                <label>Title:</label>
+                <input name="title"  value={book.title } onChange={onChangeFcnI}/>
+                <label>Author:</label>
+                <input name="author" value={book.author} onChange={onChangeFcnI}/>
                 <div>
                     <button>Save</button>
                     <button type="button" onClick={() => navigate("/")}>Cancel</button>

@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
-import {Routes, Route} from "react-router-dom";
+import {Link, Route, Routes} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
@@ -11,16 +11,36 @@ import BookFavorites from "./components/BookFavorites.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
-
+    const [timestamp, setTimestamp] = useState<string>("");
+    console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
 
     useEffect(loadAllBooks, []);
+    useEffect(() => {
+        const intervalID = setInterval(checkIfUpdateNeeded, 3000);
+        return () => clearInterval(intervalID);
+    }, [ timestamp ]);
 
     function loadAllBooks (){
         axios.get("/api/books")
             .then((response) => {
                 if (response.status!==200)
-                    throw "Get wrong response status, when loading all books: "+response.status;
-                setBooks(response.data);
+                    throw new Error("Get wrong response status, when loading all books: "+response.status);
+                setBooks(response.data.books);
+                if (!response.data.timestamp) setTimestamp("");
+                else setTimestamp(response.data.timestamp.timestamp);
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
+    }
+
+    function checkIfUpdateNeeded() {
+        axios.get("/api/books/state")
+            .then((response) => {
+                if (response.status!==200)
+                    throw new Error("Get wrong response status, when getting database timestamp: "+response.status);
+                if (response.data && timestamp!==response.data.timestamp)
+                    loadAllBooks();
             })
             .catch((error)=>{
                 console.error(error);
@@ -30,8 +50,11 @@ export default function App() {
 
     return (
         <>
-            <h1>Book Library</h1>
 
+            <Link to={`/`}><h1>Book Library</h1></Link>
+            <header>
+                {}
+            </header>
 
             <Routes>
                 <Route path="/books/:id"        element={<BookDetails />} />

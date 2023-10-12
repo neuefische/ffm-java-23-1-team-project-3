@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {Book} from "../Types.tsx";
-import {useParams} from "react-router-dom";
 import axios from "axios";
 import FavoritesList from "./FavoritesList.tsx";
 

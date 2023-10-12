@@ -16,6 +16,10 @@ export default function BookCard( props: Props ) {
             .then(props.onItemChange)
     }
 
+    function favor() {
+
+    }
+
     return (
         <div className="BookCard">
             <Link to={`/books/${props.book.id}`}>
@@ -23,6 +27,7 @@ export default function BookCard( props: Props ) {
             <div>title  : {props.book.title  }</div>
             <div>author : {props.book.author }</div>
             </Link>
+            <button onClick={favor}></button>
             <button onClick={() => navigate("/books/"+props.book.id+"/edit")}>Edit</button>
             <button onClick={deleteCard}>X</button>
         </div>

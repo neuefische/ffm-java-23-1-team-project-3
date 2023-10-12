@@ -23,6 +23,11 @@ public class LibraryController {
     public Book getBookByID(@PathVariable String id){
         return libraryService.getBookById(id);
     }
+   /* @GetMapping("/search/{title}")
+    public List<Book> getBooksByTitle(@PathVariable String title){
+        return libraryService.getBooksByTitle(title);
+    }
+*/
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

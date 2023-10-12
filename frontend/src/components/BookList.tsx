@@ -13,6 +13,8 @@ export default function BookList( props: Props ) {
         <>
             <nav>
                 <button onClick={()=>navigate("/books/add")}>Add</button>
+
+                <button onClick={()=>navigate("/books/search")}>Search</button>
             </nav>
 
         <div className="BookList">

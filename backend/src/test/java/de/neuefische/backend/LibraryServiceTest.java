@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -104,6 +106,56 @@ class LibraryServiceTest {
 		//WHEN
 		//THEN
 		assertThrows(NoSuchElementException.class, ()->libraryService.getBookById(id));
+	}
+	@Test
+	void testFindBooksByTitle_If_TitleExistsAsExactMatch_Then_itReturnsAllBooksWithSimilarTitle(){
+        //GIVEN
+		String title = "titleExist";
+		Book book = new Book("1",title,"author");
+		List<Book> books = new ArrayList<>();
+		books.add(book);
+		when(libraryRepository.findByTitleContaining(title)).thenReturn(books);
+
+		//WHEN
+		List<Book> actual = libraryService.getBooksByTitle(title);
+
+		//THEN
+		Book bookToSave = new Book("1","titleExist","author");
+		List<Book> expected = List.of(bookToSave);
+		verify(libraryRepository).findByTitleContaining(title);
+		assertEquals(expected,actual);
+	}
+
+	@Test
+	void testFindBooksByTitle_If_TitleDoesNotMatch_Then_itReturnsAllBooksThatPartiallyContainTheTitle(){
+        //GIVEN
+		String title = "TitleNotExist";
+		Book book1 = new Book("1","title1","author");
+		Book book2 = new Book("2","title2","author");
+		List<Book> books = new ArrayList<>();
+		books.add(book1);
+		books.add(book2);
+		when(libraryRepository.findByTitleContaining(title)).thenReturn(books);
+
+		//WHEN
+		List<Book> actual = libraryService.getBooksByTitle(title);
+
+		//THEN
+		Book bookToSave1 = new Book("1","title1","author");
+		Book bookToSave2 =  new Book("2","title2","author");
+		List<Book> expected = List.of(bookToSave1,bookToSave2);
+		verify(libraryRepository).findByTitleContaining(title);
+		assertEquals(expected,actual);
+	}
+	@Test
+	void testFindBooksByTitle_If_TitleNotExists_NeitherIdenticallyNorPartially_Then_itReturnsException(){
+		//GIVEN
+		String title = "TitleNotExistAtAll";
+
+		when(libraryRepository.findByTitleContaining(title)).thenReturn(emptyList());
+		//WHEN
+		//THEN
+		assertThrows(NoSuchElementException.class, ()->libraryService.getBooksByTitle(title));
 	}
 
 

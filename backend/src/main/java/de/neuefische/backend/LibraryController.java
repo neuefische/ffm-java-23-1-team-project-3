@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -25,11 +26,11 @@ public class LibraryController {
     public Book getBookByID(@PathVariable String id){
         return libraryService.getBookById(id);
     }
-   /* @GetMapping("/search/{title}")
+    @GetMapping("/search/{title}")
     public List<Book> getBooksByTitle(@PathVariable String title){
         return libraryService.getBooksByTitle(title);
     }
-*/
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

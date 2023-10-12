@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -62,16 +61,18 @@ public class LibraryService {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
     }
-   /* public List<Book> getBooksByTitle(String title) {
-        List<Book> filteredListByTitle = new ArrayList<>();
+    public List<Book> getBooksByTitle(String title) {
+        List<Book> filteredListByTitle;
         filteredListByTitle= libraryRepository.findByTitleContaining(title);
-        filteredListByTitle.stream().filter(book -> book.title().)
-        if(filteredListByTitle.size()==0){
+        List<Book> listOfBooksWithTheSameTitle = filteredListByTitle.stream().filter(book -> book.title().equalsIgnoreCase(title)).toList();
+        if(!listOfBooksWithTheSameTitle.isEmpty()){
+            return listOfBooksWithTheSameTitle;
+        }else if(!filteredListByTitle.isEmpty()){
+            return filteredListByTitle;
+        }else{
             throw new NoSuchElementException("Das Buch mit diesem Title oder mit ähnlichem Title leider nicht gefunden");
-        }else if(){
-
-        }else {
-            throw new NoSuchElementException("Buch nicht gefunden");
         }
-    }*/
+
+
+    }
 }

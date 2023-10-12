@@ -1,27 +1,31 @@
-import {Book} from "../Types.tsx";
 import {useEffect, useState} from "react";
+import {Book} from "../Types.tsx";
+import {useParams} from "react-router-dom";
 import axios from "axios";
-import BookCard from "./BookCard.tsx";
+import FavoritesList from "./FavoritesList.tsx";
 
 
-type Props = {
-    books: Book[]
-    onItemChange: () => void
-}
+export default function BookFavorites() {
 
-export default function BookFavorites(props: Props) {
+    const [books, setBooks] = useState<Book[]>([]);
+
+    useEffect(loadBooks, []);
+    function loadBooks () {
+        axios.get("/api/books/")
+            .then((response) => {
+                if (response.status !== 200)
+                    throw new Error("Get wrong response status, when loading the book: " + response.status);
+                setBooks(response.data)
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
 
     return (
-
         <div>
             <h1>My Favorites</h1>
-            <div className="BookList">
-                {
-                    props.books.map( book =>
-                        <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>
-                    )
-                }
-            </div>
+            <FavoritesList books={books} onItemChange={loadBooks}/>
         </div>
     )
 }

@@ -15,24 +15,32 @@ class LibraryServiceTest {
 
 	private LibraryRepository libraryRepository;
 	private LibraryService libraryService;
+	private TimestampService timestampService;
 
 	@BeforeEach
 	void setUp() {
 		libraryRepository = mock(LibraryRepository.class);
-		libraryService = new LibraryService(libraryRepository);
+		timestampService = mock(TimestampService.class);
+		libraryService = new LibraryService(libraryRepository,timestampService);
 	}
 
 	@Test
 	void whenGetAllBooks_calledWithEmptyRepo_returnEmptyList() {
 		// Given
 		when(libraryRepository.findAll()).thenReturn(List.of());
+		when(timestampService.getCurrentTimestamp()).thenReturn(new Timestamp("test", "<TestTimestamp>"));
 
 		// When
-		List<Book> actual = libraryService.getAllBooks();
+		DatedBookList actual = libraryService.getAllBooks();
 
 		// Then
 		verify(libraryRepository).findAll();
-		List<Book> expected = List.of();
+		verify(timestampService).getCurrentTimestamp();
+
+		DatedBookList expected = new DatedBookList(
+				List.of(),
+				new Timestamp("test", "<TestTimestamp>")
+		);
 		assertEquals(expected, actual);
 	}
 
@@ -47,19 +55,25 @@ class LibraryServiceTest {
 				new Book("127","Title5","Author5"),
 				new Book("128","Title6","Author6")
 		));
+		when(timestampService.getCurrentTimestamp()).thenReturn(new Timestamp("test", "<TestTimestamp>"));
 
 		// When
-		List<Book> actual = libraryService.getAllBooks();
+		DatedBookList actual = libraryService.getAllBooks();
 
 		// Then
 		verify(libraryRepository).findAll();
-		List<Book> expected = List.of(
-				new Book("123","Title1","Author1"),
-				new Book("124","Title2","Author2"),
-				new Book("125","Title3","Author3"),
-				new Book("126","Title4","Author4"),
-				new Book("127","Title5","Author5"),
-				new Book("128","Title6","Author6")
+		verify(timestampService).getCurrentTimestamp();
+
+		DatedBookList expected = new DatedBookList(
+				List.of(
+						new Book("123","Title1","Author1"),
+						new Book("124","Title2","Author2"),
+						new Book("125","Title3","Author3"),
+						new Book("126","Title4","Author4"),
+						new Book("127","Title5","Author5"),
+						new Book("128","Title6","Author6")
+				),
+				new Timestamp("test", "<TestTimestamp>")
 		);
 		assertEquals(expected, actual);
 	}
@@ -95,12 +109,14 @@ class LibraryServiceTest {
 
 	@Test
 	void deleteBook() {
+		// Given
 
-		Book b1 = new Book("1", "My new book", "Me");
+		// When
+		libraryService.removeBook("id");
 
-		doThrow(NullPointerException.class).when(libraryRepository).deleteById(b1.id());
-
-		assertThrows(NullPointerException.class, () -> libraryRepository.deleteById(b1.id()));
+		// Then
+		verify(libraryRepository).deleteById("id");
+		verify(timestampService).setTimestampToNow();
 	}
 
 	@Test
@@ -147,6 +163,7 @@ class LibraryServiceTest {
 		// Then
 		verify(libraryRepository).findById("456");
 		verify(libraryRepository).save(new Book("456", "Title 1", "Author 1"));
+		verify(timestampService).setTimestampToNow();
 		Book expected = new Book("456", "Title 1", "Author 1");
 		assertEquals(expected, actual);
 	}
@@ -162,8 +179,9 @@ class LibraryServiceTest {
 		Book actual = libraryService.addBook(new Book("12345678","Title6","Author6"));
 
 		//THEN
-		Book expected = new Book("128","Title6","Author6");
 		verify(libraryRepository).save(new Book(null,"Title6","Author6"));
+		verify(timestampService).setTimestampToNow();
+		Book expected = new Book("128","Title6","Author6");
 		assertEquals(expected, actual);
 	}
 }

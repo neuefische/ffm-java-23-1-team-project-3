@@ -40,16 +40,10 @@ public class LibraryService {
     }
 
     public synchronized Book addBook(Book newBook) {
-
-        Book book = new Book(
-                null,
-                newBook.title(),
-                newBook.author()
-        );
-
-        Book saved = libraryRepository.save(book);
+        Book bookToSave = newBook.withId(null);
+        Book savedBook = libraryRepository.save(bookToSave);
         timestampService.setTimestampToNow();
-        return saved;
+        return savedBook;
     }
 
     public Book getBookById(String id) {

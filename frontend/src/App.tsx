@@ -57,10 +57,10 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path="/books/:id"        element={<BookDetails />} />
-                <Route path="/"                 element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/add"        element={<AddBook onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/:id/edit"   element={<EditBook books={books} reload={loadAllBooks}/>}/>
+                <Route path="/books/:id"      element={<BookDetails />} />
+                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit" element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/favorites"  element={<BookFavorites />}/>
             </Routes>
         </>

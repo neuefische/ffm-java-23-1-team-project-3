@@ -29,7 +29,11 @@ export default function BookDetails(){
                 {book
                     ? <>
                         <h3>{book.title}</h3>
-                        <p>Author: <br/>{book.author}</p>
+                        {book.author      && <p>Author      : <br/>{book.author     }</p>}
+                        {book.description && <p>Description : <br/>{book.description}</p>}
+                        {book.publisher   && <p>Publisher   : <br/>{book.publisher  }</p>}
+                        {book.isbn        && <p>ISBN        : <br/>{book.isbn       }</p>}
+                        {book.coverUrl    && <p>Cover       : <br/><img alt="Cover Image" src={book.coverUrl}/></p>}
                     </>
                     : <>
                         <p>Book not found</p>

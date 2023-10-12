@@ -6,7 +6,7 @@ import axios from "axios";
 
 type Props = {
     books: Book[]
-    reload: ()=>void
+    onItemChange: ()=>void
 }
 
 export default function EditBook(props: Props ) {
@@ -22,12 +22,12 @@ export default function EditBook(props: Props ) {
             <button type="button" onClick={() => navigate("/")}>Back</button>
         </>
 
-    return <EditBookForm book={filteredBooks[0]} reload={props.reload}/>
+    return <EditBookForm book={filteredBooks[0]} onItemChange={props.onItemChange}/>
 }
 
 type FormProps = {
     book: Book
-    reload: ()=>void
+    onItemChange: ()=>void
 }
 
 function EditBookForm( props: FormProps ) {
@@ -46,7 +46,7 @@ function EditBookForm( props: FormProps ) {
         } );
     }
 
-    function onChangeFcnI( event: ChangeEvent<HTMLInputElement> ) {
+    function onChangeFcnI( event: ChangeEvent<any> ) {
         updateBookValue( event.target.name, event.target.value );
     }
 
@@ -62,21 +62,23 @@ function EditBookForm( props: FormProps ) {
             .then(response => {
                 if (response.status != 200)
                     throw new Error("Got wrong status on update book: " + response.status);
-                props.reload()
+                props.onItemChange();
             })
             .catch(reason => {
-                console.error(reason)
+                console.error(reason);
             });
     }
 
     return (
         <>
             <form className="EditBookForm" onSubmit={saveChanges}>
-                {/*<label>id     : {book.id}</label>*/}
-                <label>Title:</label>
-                <input name="title"  value={book.title } onChange={onChangeFcnI}/>
-                <label>Author:</label>
-                <input name="author" value={book.author} onChange={onChangeFcnI}/>
+                <label htmlFor="fld_title"       >Title       :</label><input    id="fld_title"       name="title"       value={book.title      } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_author"      >Author      :</label><input    id="fld_author"      name="author"      value={book.author     } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_description" >Description :</label><textarea id="fld_description" name="description" value={book.description} onChange={onChangeFcnI}/>
+                <label htmlFor="fld_publisher"   >Publisher   :</label><input    id="fld_publisher"   name="publisher"   value={book.publisher  } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_isbn"        >ISBN        :</label><input    id="fld_isbn"        name="isbn"        value={book.isbn       } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_coverUrl"    >Cover URL   :</label><input    id="fld_coverUrl"    name="coverUrl"    value={book.coverUrl   } onChange={onChangeFcnI}/>
+                {book.coverUrl && <img alt="Cover Image" src={book.coverUrl}/>}
                 <div>
                     <button>Save</button>
                     <button type="button" onClick={() => navigate("/")}>Cancel</button>

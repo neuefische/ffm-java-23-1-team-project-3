@@ -52,6 +52,7 @@ button {
 /*border-radius: 2px;*/
   border: 1px solid #75B8BF;
   margin-right: 1em;
+  padding-top: 4px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;

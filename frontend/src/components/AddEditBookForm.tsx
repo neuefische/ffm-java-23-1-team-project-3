@@ -1,11 +1,17 @@
 import {Book} from "../Types.tsx";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 type Props = {
     book: Book
-    saveBook: ( book: Book )=>void
+    saveBook: ( book: Book, newCover?: NewCover )=>void
     saveButtonTitle: string
+}
+
+export type NewCover = {
+    file?: File
+    url?: string
 }
 
 const defaultCoverSourceType: string = "url";
@@ -43,7 +49,9 @@ export default function AddEditBookForm( props: Props ) {
 
     function onSubmitForm( event: FormEvent<HTMLFormElement> ) {
         event.preventDefault();
-        props.saveBook(book); // TODO: consider selected cover
+        if      (coverSourceType==="file" && coverSourceFile) props.saveBook(book, { file: coverSourceFile });
+        else if (coverSourceType==="url"  && coverSourceURL ) props.saveBook(book, { url : coverSourceURL  });
+        else props.saveBook(book);
     }
 
     function onChangeSelectFcn( event: ChangeEvent<HTMLSelectElement> ) {
@@ -80,7 +88,7 @@ export default function AddEditBookForm( props: Props ) {
                 const numArr = Array.from(uint8Array);
                 const base64String = btoa( String.fromCharCode.apply(null, numArr) );
                 processDataURL(
-                    "data:"+file.type+";base64,"+base64String
+                    `data:${file.type};base64,${base64String}`
                 );
             })
             .catch(error => {
@@ -99,8 +107,8 @@ export default function AddEditBookForm( props: Props ) {
                 <label htmlFor="fld_publisher"   >Publisher   :</label><input    id="fld_publisher"   name="publisher"   value={book.publisher  } onChange={onChangeInputFcn}/>
                 <label htmlFor="fld_isbn"        >ISBN        :</label><input    id="fld_isbn"        name="isbn"        value={book.isbn       } onChange={onChangeInputFcn}/>
                 {/*
-                <label htmlFor="fld_coverUrl"    >Cover URL   :</label><input    id="fld_coverUrl"    name="coverUrl"    value={book.coverUrl   } onChange={onChangeInputFcn}/>
-*/}
+                <label htmlFor="fld_coverUrl"    >Cover URL [DEBUG] :</label><input    id="fld_coverUrl"    name="coverUrl"    value={book.coverUrl   } onChange={onChangeInputFcn}/>
+                */}
                 <label>Cover :</label>
                 <div>
                     <select value={coverSourceType} onChange={onChangeSelectFcn}>
@@ -118,4 +126,66 @@ export default function AddEditBookForm( props: Props ) {
             </form>
         </>
     )
+}
+
+export function uploadCover(
+    id: string, newCover: NewCover,
+    afterUpload?: (coverUrl: string)=>void,
+    afterError?: ()=>void
+) {
+    if      (newCover.file) uploadCoverFromFile(id, newCover.file, afterUpload, afterError)
+    else if (newCover.url ) uploadCoverFromUrl (id, newCover.url , afterUpload, afterError)
+    else if (afterError) afterError();
+}
+
+function uploadCoverFromFile(
+    id: string, file: File,
+    afterUpload?: (coverUrl: string)=>void,
+    afterError?: ()=>void
+) {
+    console.debug(`uploadCoverFromFile { id:${id} }`);
+    const data = new FormData();
+    data.append("file", file);
+    const config = {
+        headers: { 'content-type': 'multipart/form-data' }
+    };
+    axios
+        .post('/api/books/'+id+'/setCoverByFile', data, config)
+        .then( response => {
+            if (response.status != 201)
+                throw new Error(`Got wrong status [${response.status}] on uploading cover from file: ${response.data}`);
+            console.debug(`uploadCoverFromFile { id:${id} } --> success`);
+            if (afterUpload)
+                afterUpload(response.data);
+        })
+        .catch(reason => {
+            console.error("UploadError:",reason);
+            if (afterError)
+                afterError();
+        });
+}
+
+function uploadCoverFromUrl(
+    id: string, url: string,
+    afterUpload?: (coverUrl: string)=>void,
+    afterError?: ()=>void
+) {
+    console.debug(`uploadCoverFromUrl { id:${id} }`);
+    const config = {
+        headers: { 'content-type': 'text/plain' }
+    };
+    axios
+        .post('/api/books/'+id+'/setCoverByURL', url, config)
+        .then( response => {
+            if (response.status != 201)
+                throw new Error(`Got wrong status [${response.status}] on uploading cover from URL: ${response.data}`);
+            console.debug(`uploadCoverFromUrl { id:${id} } --> success`);
+            if (afterUpload)
+                afterUpload(response.data);
+        })
+        .catch(reason => {
+            console.error("UploadError:",reason);
+            if (afterError)
+                afterError();
+        });
 }

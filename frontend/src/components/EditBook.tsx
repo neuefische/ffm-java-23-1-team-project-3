@@ -1,7 +1,7 @@
 import {Book} from "../Types.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import AddEditBookForm from "./AddEditBookForm.tsx";
+import AddEditBookForm, {NewCover, uploadCover} from "./AddEditBookForm.tsx";
 
 type Props = {
     books: Book[]
@@ -21,24 +21,43 @@ export default function EditBook(props: Props ) {
             <button type="button" onClick={() => navigate("/")}>Back</button>
         </>
 
-    function update( book: Book ) {
+    function updateBook(book: Book) {
+        console.debug(`EditBook.updateBook { id:${book.id} }`);
         axios
-            .put('/api/books/'+book.id, book )
+            .put('/api/books/' + book.id, book)
             .then(response => {
                 if (response.status != 200)
                     throw new Error("Got wrong status on update book: " + response.status);
+                console.debug(`EditBook.updateBook { id:${book.id} } --> success`);
                 props.onItemChange();
             })
             .catch(reason => {
-                console.error(reason);
+                console.error("Error in EditBook.updateBook", reason);
             });
+    }
+
+    function save( book: Book, newCover?: NewCover ) {
+        if (newCover)
+            uploadCover(
+                book.id, newCover,
+                coverUrl => {
+                    console.debug(`EditBook.save { id:${book.id} } --> setCoverURL( "${coverUrl}" )`);
+                    book.coverUrl = coverUrl;
+                    updateBook(book);
+                },
+                () => {
+                    updateBook(book);
+                }
+            )
+        else
+            updateBook(book);
         navigate("/");
     }
 
     return (
         <AddEditBookForm
             book={filteredBooks[0]}
-            saveBook={update}
+            saveBook={save}
             saveButtonTitle="Save"
         />
     )

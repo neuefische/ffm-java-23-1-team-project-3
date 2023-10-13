@@ -18,23 +18,27 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ImageController {
 
+	public static final String DUMMY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/1989_Ford_Fiesta_Popular_1.0_Front.jpg/500px-1989_Ford_Fiesta_Popular_1.0_Front.jpg";
 	private final LibraryService libraryService;
 
 	@PostMapping("/{id}/setCoverByURL")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String addBook(
+	public String uploadFromURL(
 			@PathVariable String id,
 			@RequestBody String url
 	) {
 		if (libraryService.isIdUnknown(id))
 			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
 
-		return url;
+		System.out.println();
+		System.out.printf("URL: %s%n", url);
+
+		return DUMMY_URL;
 	}
 
 	@PostMapping("/{id}/setCoverByFile")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String handleFileUpload(
+	public String uploadFromFile(
 			@PathVariable String id,
 			@RequestParam("file") MultipartFile file
 	) {
@@ -56,7 +60,7 @@ public class ImageController {
 		try {
 			byte[] bytes = file.getBytes();
 			System.out.printf("content: %d bytes%n", bytes.length);
-			return "https://taskviewer.bootcamp-tools.de/assets/logo-black-c716199a.svg";
+			return DUMMY_URL;
 		}
 		catch (IOException e) {
 			throw new ControllerException(

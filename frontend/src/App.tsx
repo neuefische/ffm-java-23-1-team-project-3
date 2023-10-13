@@ -49,12 +49,10 @@ export default function App() {
 
     return (
         <>
-
             <Link to={`/`}><h1>Book Library</h1></Link>
             <header>
                 {}
             </header>
-            {/*<TestUploadForm/>*/}
 
             <Routes>
                 <Route path="/books/:id"      element={<BookDetails />} />

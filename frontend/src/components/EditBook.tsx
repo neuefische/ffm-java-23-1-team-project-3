@@ -1,4 +1,3 @@
-import './EditBook.css';
 import {Book} from "../Types.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
@@ -38,7 +37,6 @@ export default function EditBook(props: Props ) {
 
     return (
         <AddEditBookForm
-            formCssClass="EditBookForm"
             book={filteredBooks[0]}
             saveBook={update}
             saveButtonTitle="Save"

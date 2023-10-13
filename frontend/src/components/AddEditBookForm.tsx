@@ -6,7 +6,6 @@ type Props = {
     book: Book
     saveBook: ( book: Book )=>void
     saveButtonTitle: string
-    formCssClass: string
 }
 
 export default function AddEditBookForm( props: Props ) {
@@ -36,7 +35,7 @@ export default function AddEditBookForm( props: Props ) {
 
     return (
         <>
-            <form className={props.formCssClass} onSubmit={saveChanges}>
+            <form onSubmit={saveChanges}>
                 <label htmlFor="fld_title"       >Title       :</label><input    id="fld_title"       name="title"       value={book.title      } onChange={onChangeFcnI}/>
                 <label htmlFor="fld_author"      >Author      :</label><input    id="fld_author"      name="author"      value={book.author     } onChange={onChangeFcnI}/>
                 <label htmlFor="fld_description" >Description :</label><textarea id="fld_description" name="description" value={book.description} onChange={onChangeFcnI}/>

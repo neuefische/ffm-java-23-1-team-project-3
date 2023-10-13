@@ -30,7 +30,6 @@ export default function AddBook(props: Props) {
 
     return (
         <AddEditBookForm
-            formCssClass="addBookForm"
             book={emptyBook}
             saveBook={saveNewBook}
             saveButtonTitle="Add New Book"

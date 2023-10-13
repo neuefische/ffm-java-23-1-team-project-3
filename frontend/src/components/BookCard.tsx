@@ -16,7 +16,7 @@ export default function BookCard( props: Props ) {
 
         const popupOverlay = document.getElementById("popupOverlay");
         if(popupOverlay){
-            popupOverlay.classList.toggle("showPopup");
+            popupOverlay.classList.remove("showPopup");
         }
     }
 

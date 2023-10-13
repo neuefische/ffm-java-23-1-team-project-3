@@ -1,8 +1,8 @@
 import './EditBook.css';
 import {Book} from "../Types.tsx";
 import {useNavigate, useParams} from "react-router-dom";
-import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import axios from "axios";
+import AddEditBookForm from "./AddEditBookForm.tsx";
 
 type Props = {
     books: Book[]
@@ -22,40 +22,6 @@ export default function EditBook(props: Props ) {
             <button type="button" onClick={() => navigate("/")}>Back</button>
         </>
 
-    return <EditBookForm book={filteredBooks[0]} onItemChange={props.onItemChange}/>
-}
-
-type FormProps = {
-    book: Book
-    onItemChange: ()=>void
-}
-
-function EditBookForm( props: FormProps ) {
-    const [book, updateBook] = useState<Book>(props.book);
-    useEffect(
-        ()=> updateBook(props.book),
-        [ props.book ]
-    );
-    const navigate = useNavigate();
-    console.debug(`Rendering EditBookForm { id:"${props.book.id}" }`);
-
-    function updateBookValue( name:string, value:string ) {
-        updateBook( {
-            ...book,
-            [name]: value
-        } );
-    }
-
-    function onChangeFcnI( event: ChangeEvent<any> ) {
-        updateBookValue( event.target.name, event.target.value );
-    }
-
-    function saveChanges( event: FormEvent<HTMLFormElement> ) {
-        event.preventDefault();
-        update(book);
-        navigate("/");
-    }
-
     function update( book: Book ) {
         axios
             .put('/api/books/'+book.id, book )
@@ -67,23 +33,16 @@ function EditBookForm( props: FormProps ) {
             .catch(reason => {
                 console.error(reason);
             });
+        navigate("/");
     }
 
     return (
-        <>
-            <form className="EditBookForm" onSubmit={saveChanges}>
-                <label htmlFor="fld_title"       >Title       :</label><input    id="fld_title"       name="title"       value={book.title      } onChange={onChangeFcnI}/>
-                <label htmlFor="fld_author"      >Author      :</label><input    id="fld_author"      name="author"      value={book.author     } onChange={onChangeFcnI}/>
-                <label htmlFor="fld_description" >Description :</label><textarea id="fld_description" name="description" value={book.description} onChange={onChangeFcnI}/>
-                <label htmlFor="fld_publisher"   >Publisher   :</label><input    id="fld_publisher"   name="publisher"   value={book.publisher  } onChange={onChangeFcnI}/>
-                <label htmlFor="fld_isbn"        >ISBN        :</label><input    id="fld_isbn"        name="isbn"        value={book.isbn       } onChange={onChangeFcnI}/>
-                <label htmlFor="fld_coverUrl"    >Cover URL   :</label><input    id="fld_coverUrl"    name="coverUrl"    value={book.coverUrl   } onChange={onChangeFcnI}/>
-                {book.coverUrl && <img alt="Cover Image" src={book.coverUrl}/>}
-                <div>
-                    <button>Save</button>
-                    <button type="button" onClick={() => navigate("/")}>Cancel</button>
-                </div>
-            </form>
-        </>
+        <AddEditBookForm
+            formCssClass="EditBookForm"
+            book={filteredBooks[0]}
+            saveBook={update}
+            saveButtonTitle="Save"
+        />
     )
 }
+

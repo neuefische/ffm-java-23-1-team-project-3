@@ -56,6 +56,7 @@ public class LibraryService {
         }
     }
 
-
-
+    public boolean isIdUnknown(String id) {
+        return libraryRepository.findById(id).isEmpty();
+    }
 }

@@ -63,7 +63,7 @@ public class LibraryService {
     }
     public List<Book> getBooksByTitle(String title) {
         List<Book> filteredListByTitle;
-        filteredListByTitle= libraryRepository.findByTitleContaining(title);
+        filteredListByTitle= libraryRepository.findByTitleRegexIgnoreCase(title);
         List<Book> listOfBooksWithTheSameTitle = filteredListByTitle.stream().filter(book -> book.title().equalsIgnoreCase(title)).toList();
         if(!listOfBooksWithTheSameTitle.isEmpty()){
             return listOfBooksWithTheSameTitle;

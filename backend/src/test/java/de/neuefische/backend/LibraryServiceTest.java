@@ -114,7 +114,7 @@ class LibraryServiceTest {
 		Book book = new Book("1",title,"author");
 		List<Book> books = new ArrayList<>();
 		books.add(book);
-		when(libraryRepository.findByTitleContaining(title)).thenReturn(books);
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(books);
 
 		//WHEN
 		List<Book> actual = libraryService.getBooksByTitle(title);
@@ -122,7 +122,7 @@ class LibraryServiceTest {
 		//THEN
 		Book bookToSave = new Book("1","titleExist","author");
 		List<Book> expected = List.of(bookToSave);
-		verify(libraryRepository).findByTitleContaining(title);
+		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
 		assertEquals(expected,actual);
 	}
 
@@ -135,7 +135,7 @@ class LibraryServiceTest {
 		List<Book> books = new ArrayList<>();
 		books.add(book1);
 		books.add(book2);
-		when(libraryRepository.findByTitleContaining(title)).thenReturn(books);
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(books);
 
 		//WHEN
 		List<Book> actual = libraryService.getBooksByTitle(title);
@@ -144,7 +144,7 @@ class LibraryServiceTest {
 		Book bookToSave1 = new Book("1","title1","author");
 		Book bookToSave2 =  new Book("2","title2","author");
 		List<Book> expected = List.of(bookToSave1,bookToSave2);
-		verify(libraryRepository).findByTitleContaining(title);
+		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
 		assertEquals(expected,actual);
 	}
 	@Test
@@ -152,7 +152,7 @@ class LibraryServiceTest {
 		//GIVEN
 		String title = "TitleNotExistAtAll";
 
-		when(libraryRepository.findByTitleContaining(title)).thenReturn(emptyList());
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(emptyList());
 		//WHEN
 		//THEN
 		assertThrows(NoSuchElementException.class, ()->libraryService.getBooksByTitle(title));

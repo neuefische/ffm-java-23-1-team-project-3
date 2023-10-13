@@ -82,6 +82,69 @@ class LibraryIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+
+	@Test
+	@DirtiesContext
+	void getBooksByTitle_If_TitleExistsAsExactMatch_Then_itReturnsAllBooksWithSimilarTitle() throws Exception {
+		//GIVEN
+		String title= "title 1";
+		Book book = new Book("id 1",title,"author 1");
+		libraryRepository.save(book);
+
+		//WHEN
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/books/search/"+ title))
+
+				//THEN
+				.andExpect(status().isOk())
+				.andExpect(content().json("""
+					[
+					{
+						"id": "id 1",
+						"title": "title 1",
+						"author": "author 1"
+					}
+					]
+				"""));
+	}
+
+	@Test
+	@DirtiesContext
+	void getBooksByTitle_If_TitleDoesNotMatch_Then_itReturnsAllBooksThatPartiallyContainTheTitle() throws Exception {
+		//GIVEN
+		String title= "Java";
+		Book book = new Book("id 1","java 1","author 1");
+		libraryRepository.save(book);
+
+		//WHEN
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/books/search/"+ title))
+
+				//THEN
+				.andExpect(status().isOk())
+				.andExpect(content().json("""
+					[
+					{
+						"id": "id 1",
+						"title": "java 1",
+						"author": "author 1"
+					}
+					]
+				"""));
+	}
+
+	@Test
+	@DirtiesContext
+	void getBookByTitle_If_TitleNotExists_NeitherIdenticallyNorPartially_Then_itReturnsException() throws Exception {
+		//GIVEN
+		String title= "Java";
+
+		//WHEN
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/books/search/"+ title))
+
+				//THEN
+				.andExpect(status().isNotFound());
+	}
+
+
 	@Test
 	@DirtiesContext
 	void whenGetAllBooks_performsOnFilledRepo_returnsRepoContent() throws Exception {

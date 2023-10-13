@@ -7,7 +7,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
-import BookFavorites from "./components/BookFavorites.tsx";
+import FavoritesList from "./components/FavoritesList.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -61,7 +61,7 @@ export default function App() {
                 <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit" element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/favorites"      element={<BookFavorites />}/>
+                <Route path="/favorites"      element={<FavoritesList books={books} onItemChange={loadAllBooks}/>}/>
             </Routes>
         </>
     )

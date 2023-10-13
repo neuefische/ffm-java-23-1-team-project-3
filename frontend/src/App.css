@@ -33,3 +33,7 @@
     transition: all .2s ease-in;
     color: #000;
 }
+
+.hidden {
+    display: none;
+}

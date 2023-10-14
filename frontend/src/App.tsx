@@ -67,20 +67,15 @@ export default function App() {
         <>
             <Link to={`/`}><h1 className="title">Book Library</h1></Link>
             <header>
-                {
-                <button className="searchButton" onClick={()=>navigate("/books/search")}>
-                    <h3>Search a book title</h3>
-                    <p>click here</p>
-                </button>
-                }
+                {}
             </header>
 
             <Routes>
                 <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
-                <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} onItemChange={loadAllBooks}/>}/>
+                <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit"               element={<EditBook books={books} reload={loadAllBooks}/>}/>
-                <Route path="/books/search/:title"          element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/search/:title"          element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={showBooksAfterSearch}/>}/>
             </Routes>
 

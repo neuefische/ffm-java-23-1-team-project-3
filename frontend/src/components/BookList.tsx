@@ -7,12 +7,20 @@ type Props = {
     onItemChange: () => void
     showAdd: boolean
     showHomepage: boolean
+    showSearch: boolean
 }
 
 export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
         <>
+            {props.showSearch &&
+                <button className="searchButton" onClick={()=>navigate("/books/search")}>
+                    <h3>Search a book title</h3>
+                    <p>click here</p>
+                </button>
+            }
+
         <div className="BookList">
             {props.showAdd &&
             <button className="BookCard" onClick={()=>navigate("/books/add")}>

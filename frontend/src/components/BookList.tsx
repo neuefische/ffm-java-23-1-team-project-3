@@ -5,27 +5,31 @@ import {useNavigate} from "react-router-dom";
 type Props = {
     books: Book[]
     onItemChange: () => void
+    showAdd: boolean
+    showHomepage: boolean
 }
 
 export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
         <>
-            {/*<nav>
-                <button onClick={()=>navigate("/books/add")}>Add</button>
-
-                <button onClick={()=>navigate("/books/search")}>Search</button>
-            </nav>*/}
         <div className="BookList">
+            {props.showAdd &&
             <button className="BookCard" onClick={()=>navigate("/books/add")}>
                 <h3>Add a new Book</h3>
                 <p>click here</p>
             </button>
+            }
             {
                 props.books.map( book =>
                     <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>
                 )
             }
+            {
+                props.showHomepage &&
+                <button type="button" onClick={()=>navigate("/")}>Back to Homepage</button>
+            }
+
         </div>
         </>
     )

@@ -3,15 +3,18 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
-import {Link, Route, Routes} from "react-router-dom";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
+import SearchBookByTitle from "./components/SearchBookByTitle.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
     const [timestamp, setTimestamp] = useState<string>("");
+    const [booksFromResearch, setBooksFromResearch] = useState<Book[]>([]);
     console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
+    const navigate = useNavigate();
 
     useEffect(loadAllBooks, []);
     useEffect(() => {
@@ -46,20 +49,41 @@ export default function App() {
             })
     }
 
+    function showBooksAfterSearch(title : string){
+        axios.get("/api/books/search/"+ title)
+            .then((response) => {
+                if (response.status!==200)
+                    throw new Error("Get wrong response status, when loading the books after searching: "+response.status);
+                setBooksFromResearch(response.data)
+                console.log(title)
+                navigate("/books/search/:title");
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
+    }
 
     return (
         <>
-            <Link to={`/`}><h1>Book Library</h1></Link>
+            <Link to={`/`}><h1 className="title">Book Library</h1></Link>
             <header>
-                {}
+                {
+                <button className="searchButton" onClick={()=>navigate("/books/search")}>
+                    <h3>Search a book title</h3>
+                    <p>click here</p>
+                </button>
+                }
             </header>
 
             <Routes>
-                <Route path="/books/:id"      element={<BookDetails />} />
-                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/:id/edit" element={<EditBook books={books} reload={loadAllBooks}/>}/>
+                <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
+                <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit"               element={<EditBook books={books} reload={loadAllBooks}/>}/>
+                <Route path="/books/search/:title"          element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={showBooksAfterSearch}/>}/>
             </Routes>
+
         </>
     )
 }

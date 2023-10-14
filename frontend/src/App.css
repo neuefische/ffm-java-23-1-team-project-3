@@ -33,3 +33,13 @@
     transition: all .2s ease-in;
     color: #000;
 }
+.searchButton{
+    padding: 0.2em 0.5em;
+    margin: 0.5em;
+    background-color: #fff;
+    font-size: 14px;
+    text-align: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+}

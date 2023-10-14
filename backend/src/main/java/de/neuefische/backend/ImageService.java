@@ -24,35 +24,40 @@ public class ImageService {
 			@Value("${app.cloudinary.folder}") String cloudinaryFolder,
 			LibraryRepository libraryRepository
 	) {
-		cloudinary = new Cloudinary(cloudinaryUrl);
+		cloudinary = cloudinaryUrl.isEmpty() ? null : new Cloudinary(cloudinaryUrl);
 		this.cloudinaryFolder = cloudinaryFolder;
 		this.libraryRepository = libraryRepository;
-		log.info("Cloudinary Folder: %s".formatted(cloudinaryFolder));
+		log.info("Cloudinary Folder: \"%s\"".formatted(cloudinaryFolder));
+	}
+
+	public String uploadFromURL(@NonNull String id, @NonNull String url) throws IOException {
+		return uploadObject(id, url);
+	}
+
+	public String uploadFromFile(@NonNull String id, @NonNull MultipartFile file) throws IOException {
+		return uploadObject(id, file.getBytes());
+	}
+
+	private String uploadObject(String id, Object source) throws IOException {
+		if (isIdUnknown(id))
+			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
+
+		Map<String, Object> params = Map.of("public_id", cloudinaryFolder +"/"+ id);
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> result = cloudinary!=null
+				? cloudinary.uploader().upload(source, params)
+				: Map.of( "secure_url", getFakeUrl(source));
+		return result.get("secure_url").toString();
+	}
+
+	private static String getFakeUrl(Object source) {
+		return source instanceof String
+				? source.toString()
+				: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Face-blush.svg/240px-Face-blush.svg.png";
 	}
 
 	private boolean isIdUnknown(String id) {
 		return libraryRepository.findById(id).isEmpty();
-	}
-
-	public String uploadFromURL(@NonNull String id, @NonNull String url) throws IOException {
-		if (isIdUnknown(id))
-			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
-
-		Map<String, Object> params = Map.of("public_id", cloudinaryFolder +"/"+ id);
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> result = cloudinary.uploader().upload(url, params);
-		return result.get("secure_url").toString();
-	}
-
-	public String uploadFromFile(@NonNull String id, @NonNull MultipartFile file) throws IOException {
-		if (isIdUnknown(id))
-			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
-
-		Map<String, Object> params = Map.of("public_id", cloudinaryFolder +"/"+ id);
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> result = cloudinary.uploader().upload(file.getBytes(), params);
-		return result.get("secure_url").toString();
 	}
 }

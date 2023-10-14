@@ -18,8 +18,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ImageController {
 
-	public static final String DUMMY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/1989_Ford_Fiesta_Popular_1.0_Front.jpg/500px-1989_Ford_Fiesta_Popular_1.0_Front.jpg";
-	private final LibraryService libraryService;
+	private final ImageService imageService;
 
 	@PostMapping("/{id}/setCoverByURL")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -27,13 +26,14 @@ public class ImageController {
 			@PathVariable String id,
 			@RequestBody String url
 	) {
-		if (libraryService.isIdUnknown(id))
-			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
-
-		System.out.println();
-		System.out.printf("URL: %s%n", url);
-
-		return DUMMY_URL;
+		try {
+			return imageService.uploadFromURL(id, url);
+		} catch (IOException e) {
+			throw new ControllerException(
+					HttpStatus.INTERNAL_SERVER_ERROR,
+					"Error while uploading image: " + e.getMessage()
+			);
+		}
 	}
 
 	@PostMapping("/{id}/setCoverByFile")
@@ -42,30 +42,17 @@ public class ImageController {
 			@PathVariable String id,
 			@RequestParam("file") MultipartFile file
 	) {
-		if (libraryService.isIdUnknown(id))
-			throw new NoSuchElementException(
-					"Can't set cover of book with ID \"%s\": Unknown ID".formatted(id)
-			);
-
 		if (file == null)
 			throw new ControllerException(
-					HttpStatus.BAD_REQUEST, "Keine Datei ausgewählt."
+					HttpStatus.BAD_REQUEST, "Request contains no file."
 			);
 
-		System.out.println();
-		System.out.printf("Name: %s%n", file.getName());
-		System.out.printf("Size: %d%n", file.getSize());
-		System.out.printf("ContentType: %s%n", file.getContentType());
-		System.out.printf("OriginalFilename: %s%n", file.getOriginalFilename());
 		try {
-			byte[] bytes = file.getBytes();
-			System.out.printf("content: %d bytes%n", bytes.length);
-			return DUMMY_URL;
-		}
-		catch (IOException e) {
+			return imageService.uploadFromFile(id, file);
+		} catch (IOException e) {
 			throw new ControllerException(
 					HttpStatus.INTERNAL_SERVER_ERROR,
-					"Fehler beim Speichern der Datei: " + file.getOriginalFilename()
+					"Error while uploading image: " + e.getMessage()
 			);
 		}
 	}

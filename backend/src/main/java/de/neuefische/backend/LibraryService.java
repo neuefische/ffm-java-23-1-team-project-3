@@ -55,8 +55,4 @@ public class LibraryService {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
     }
-
-    public boolean isIdUnknown(String id) {
-        return libraryRepository.findById(id).isEmpty();
-    }
 }

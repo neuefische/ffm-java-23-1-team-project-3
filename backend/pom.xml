@@ -46,6 +46,12 @@
             <version>4.6.2</version>
             <scope>test</scope>
         </dependency>
+        <!--suppress VulnerableLibrariesLocal -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.35.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -55,7 +55,7 @@ export default function App() {
             <header>
                 <nav>
                     <Link to={`/`}>All Books</Link>
-                    <Link to={`/favorites`}>Favorites</Link>
+                    <Link to={`/favorites`}>My Favorites</Link>
                 </nav>
             </header>
 

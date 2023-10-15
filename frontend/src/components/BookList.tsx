@@ -3,6 +3,7 @@ import BookCard from "./BookCard.tsx";
 import {useNavigate} from "react-router-dom";
 
 type Props = {
+    headline?: string
     books: Book[]
     onItemChange: () => void
 }
@@ -11,7 +12,7 @@ export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
         <>
-
+        {props.headline && <h3>{props.headline}</h3>}
 
         <div className="BookList">
             <button className="BookCard" onClick={()=>navigate("/books/add")}>

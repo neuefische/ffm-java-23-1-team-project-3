@@ -3,9 +3,7 @@ package de.neuefische.backend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,15 +23,9 @@ public class ImageController {
 	public String uploadFromURL(
 			@PathVariable String id,
 			@RequestBody String url
-	) {
-		try {
-			return imageService.uploadFromURL(id, url);
-		} catch (IOException e) {
-			throw new ControllerException(
-					HttpStatus.INTERNAL_SERVER_ERROR,
-					"Error while uploading image: " + e.getMessage()
-			);
-		}
+	) throws IOException
+	{
+		return imageService.uploadFromURL(id, url);
 	}
 
 	@PostMapping("/{id}/setCoverByFile")
@@ -41,26 +33,9 @@ public class ImageController {
 	public String uploadFromFile(
 			@PathVariable String id,
 			@RequestParam("file") MultipartFile file
-	) {
-		try {
-			return imageService.uploadFromFile(id, file);
-		} catch (IOException e) {
-			throw new ControllerException(
-					HttpStatus.INTERNAL_SERVER_ERROR,
-					"Error while uploading image: " + e.getMessage()
-			);
-		}
-	}
-
-	public static class ControllerException extends RuntimeException {
-
-		@NonNull
-		private final HttpStatusCode status;
-
-		ControllerException(@NonNull HttpStatusCode status, @NonNull String message) {
-			super(message);
-			this.status = status;
-		}
+	) throws IOException
+	{
+		return imageService.uploadFromFile(id, file);
 	}
 
 	@ExceptionHandler(NoSuchElementException.class)
@@ -71,12 +46,12 @@ public class ImageController {
 		return new ErrorMessage(message);
 	}
 
-	@ExceptionHandler(ControllerException.class)
-	public ResponseEntity<ErrorMessage> handleException(ControllerException ex) {
-		String message = "ControllerException[%s]: %s".formatted(ex.status.toString(), ex.getMessage());
+	@ExceptionHandler(IOException.class)
+	public ResponseEntity<ErrorMessage> handleException(IOException ex) {
+		String message = "IOException while uploading image: %s".formatted(ex.getMessage());
 		log.error(message);
 		return ResponseEntity
-				.status(ex.status)
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(new ErrorMessage(message));
 	}
 

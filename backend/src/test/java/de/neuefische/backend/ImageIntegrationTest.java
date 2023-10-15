@@ -11,6 +11,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Base64;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,11 +87,11 @@ class ImageIntegrationTest {
 		mockMvc
 				.perform(MockMvcRequestBuilders
 						.multipart(HttpMethod.POST, "/api/books/id1/setCoverByFile")
-						.file(new MockMultipartFile("file", new byte[]{1, 2, 3, 4, 5, 6}))
+						.file(new MockMultipartFile("file", "testimage.png", MediaType.IMAGE_PNG_VALUE, new byte[]{1, 2, 3, 4, 5, 6}))
 				)
 
 				// Then
 				.andExpect(status().isCreated())
-				.andExpect(content().string("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Face-blush.svg/240px-Face-blush.svg.png"));
+				.andExpect(content().string("data:"+ MediaType.IMAGE_PNG_VALUE +";base64,"+ Base64.getEncoder().encodeToString(new byte[]{1, 2, 3, 4, 5, 6})));
 	}
 }

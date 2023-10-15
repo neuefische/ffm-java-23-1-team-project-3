@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 @Slf4j
 @Service
@@ -31,14 +33,17 @@ public class ImageService {
 	}
 
 	public String uploadFromURL(@NonNull String id, @NonNull String url) throws IOException {
-		return uploadObject(id, url);
+		return uploadObject(id, url, str -> str);
 	}
 
 	public String uploadFromFile(@NonNull String id, @NonNull MultipartFile file) throws IOException {
-		return uploadObject(id, file.getBytes());
+		return uploadObject(id, file.getBytes(), bytes -> {
+			String base64String = Base64.getEncoder().encodeToString(bytes);
+			return "data:"+file.getContentType()+";base64,"+base64String;
+		});
 	}
 
-	private String uploadObject(String id, Object source) throws IOException {
+	private <S> String uploadObject(String id, S source, Function<S,String> getReplacementUrl) throws IOException {
 		if (isIdUnknown(id))
 			throw new NoSuchElementException("Can't set cover of book with ID \"%s\": Unknown ID".formatted(id));
 
@@ -47,14 +52,8 @@ public class ImageService {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = cloudinary!=null
 				? cloudinary.uploader().upload(source, params)
-				: Map.of( "secure_url", getReplacementUrl(source));
+				: Map.of( "secure_url", getReplacementUrl.apply(source));
 		return result.get("secure_url").toString();
-	}
-
-	private static String getReplacementUrl(Object source) {
-		return source instanceof String
-				? source.toString()
-				: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Face-blush.svg/240px-Face-blush.svg.png";
 	}
 
 	private boolean isIdUnknown(String id) {

@@ -3,9 +3,11 @@ package de.neuefische.backend;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -74,10 +76,10 @@ class ImageServiceTest {
 		));
 
 		// When
-		String actual = imageService.uploadFromFile("TestId", new MockMultipartFile("TestFile", new byte[]{1, 2, 3, 4}));
+		String actual = imageService.uploadFromFile("TestId", new MockMultipartFile("file", "testimage.png", MediaType.IMAGE_PNG_VALUE, new byte[]{1, 2, 3, 4}));
 
 		// Then
-		String expected = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Face-blush.svg/240px-Face-blush.svg.png";
+		String expected = "data:"+ MediaType.IMAGE_PNG_VALUE +";base64,"+ Base64.getEncoder().encodeToString(new byte[]{1, 2, 3, 4});
 		assertEquals(expected, actual);
 	}
 }

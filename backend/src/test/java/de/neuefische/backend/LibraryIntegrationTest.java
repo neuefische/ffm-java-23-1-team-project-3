@@ -68,7 +68,8 @@ class LibraryIntegrationTest {
 						"description": "Desc 1",
 						"publisher"  : "Publisher 1",
 						"isbn"       : "ISBN 1",
-						"coverUrl"   : "URL 1"
+						"coverUrl"   : "URL 1",
+						"favorite"   : false
 					}
 				"""));
     }
@@ -107,10 +108,10 @@ class LibraryIntegrationTest {
 				.andExpect(content().json("""
 					{
 						"books": [
-							{ "id": "id1", "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" },
-							{ "id": "id2", "title": "Title 2", "author": "Author 2", "description": "Desc 2", "publisher": "Publisher 2", "isbn": "ISBN 2", "coverUrl": "URL 2" },
-							{ "id": "id3", "title": "Title 3", "author": "Author 3", "description": "Desc 3", "publisher": "Publisher 3", "isbn": "ISBN 3", "coverUrl": "URL 3" },
-							{ "id": "id4", "title": "Title 4", "author": "Author 4", "description": "Desc 4", "publisher": "Publisher 4", "isbn": "ISBN 4", "coverUrl": "URL 4" }
+							{ "id": "id1", "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false },
+							{ "id": "id2", "title": "Title 2", "author": "Author 2", "description": "Desc 2", "publisher": "Publisher 2", "isbn": "ISBN 2", "coverUrl": "URL 2", "favorite": false },
+							{ "id": "id3", "title": "Title 3", "author": "Author 3", "description": "Desc 3", "publisher": "Publisher 3", "isbn": "ISBN 3", "coverUrl": "URL 3", "favorite": false },
+							{ "id": "id4", "title": "Title 4", "author": "Author 4", "description": "Desc 4", "publisher": "Publisher 4", "isbn": "ISBN 4", "coverUrl": "URL 4", "favorite": false }
 						],
 						"timestamp": {
 							"id": "test",
@@ -144,14 +145,14 @@ class LibraryIntegrationTest {
                         .post("/api/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-							{ "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+							{ "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 						""")
                 )
 
                 // Then
                 .andExpect(status().isCreated())
                 .andExpect(content().json("""
-					{ "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+					{ "title": "Title 1", "author": "Author 1", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 				"""))
                 .andExpect(jsonPath("$.id").isString());
     }
@@ -171,7 +172,7 @@ class LibraryIntegrationTest {
 						.put("/api/books/id1")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
-							{ "id": "id2", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+							{ "id": "id2", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 						""")
 				)
 
@@ -194,7 +195,7 @@ class LibraryIntegrationTest {
 						.put("/api/books/id10")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
-							{ "id": "id10", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+							{ "id": "id10", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 						""")
 				)
 
@@ -217,14 +218,14 @@ class LibraryIntegrationTest {
 						.put("/api/books/id1")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
-							{ "id": "id1", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+							{ "id": "id1", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 						""")
 				)
 
 				// Then
 				.andExpect(status().isOk())
 				.andExpect(content().json("""
-					{ "id": "id1", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1" }
+					{ "id": "id1", "title": "Title 1B", "author": "Author 1B", "description": "Desc 1", "publisher": "Publisher 1", "isbn": "ISBN 1", "coverUrl": "URL 1", "favorite": false }
 				"""));
 	}
 

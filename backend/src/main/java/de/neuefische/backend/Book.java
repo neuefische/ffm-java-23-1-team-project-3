@@ -11,6 +11,9 @@ public record Book(
         String publisher,
         String isbn,
         String coverUrl,
-        Boolean favorite
+        boolean favorite
 ) {
+	public Book(String id, String title, String author, String description, String publisher, String isbn, String coverUrl) {
+		this(id, title, author, description, publisher, isbn, coverUrl, false);
+	}
 }

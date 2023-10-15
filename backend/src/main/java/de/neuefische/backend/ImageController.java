@@ -42,11 +42,6 @@ public class ImageController {
 			@PathVariable String id,
 			@RequestParam("file") MultipartFile file
 	) {
-		if (file == null)
-			throw new ControllerException(
-					HttpStatus.BAD_REQUEST, "Request contains no file."
-			);
-
 		try {
 			return imageService.uploadFromFile(id, file);
 		} catch (IOException e) {

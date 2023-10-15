@@ -47,11 +47,11 @@ public class ImageService {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = cloudinary!=null
 				? cloudinary.uploader().upload(source, params)
-				: Map.of( "secure_url", getFakeUrl(source));
+				: Map.of( "secure_url", getReplacementUrl(source));
 		return result.get("secure_url").toString();
 	}
 
-	private static String getFakeUrl(Object source) {
+	private static String getReplacementUrl(Object source) {
 		return source instanceof String
 				? source.toString()
 				: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Face-blush.svg/240px-Face-blush.svg.png";

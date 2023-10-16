@@ -3,15 +3,19 @@ import {useEffect, useState} from "react";
 import {Book} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
-import {Link, Route, Routes} from "react-router-dom";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
+import SearchBookByTitle from "./components/SearchBookByTitle.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
     const [timestamp, setTimestamp] = useState<string>("");
+    const [booksFromResearch, setBooksFromResearch] = useState<Book[]>([]);
+    const [title, setTitle] = useState<string>("");
     console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
+    const navigate = useNavigate();
 
     useEffect(loadAllBooks, []);
     useEffect(() => {
@@ -19,6 +23,10 @@ export default function App() {
         return () => clearInterval(intervalID);
     }, [ timestamp ]);
 
+    function updateBookList(){
+        loadAllBooks();
+        showBooksAfterSearch(title,false);
+    }
     function loadAllBooks (){
         axios.get("/api/books")
             .then((response) => {
@@ -60,10 +68,28 @@ export default function App() {
 
     const favoriteBooks = books.filter(book => book.favorite)
 
+    function setSearch(title : string){
+        setTitle(title);
+        showBooksAfterSearch(title,true);
+    }
+    function showBooksAfterSearch(title : string, jumpToList : boolean){
+        axios.get("/api/books/search/"+ title)
+            .then((response) => {
+                if (response.status!==200)
+                    throw new Error("Get wrong response status, when loading the books after searching: "+response.status);
+                setBooksFromResearch(response.data)
+                console.log(title)
+                if(jumpToList)
+                  navigate("/books/search/title");
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
+    }
+
     return (
         <>
-
-            <Link to={`/`}><h1>Book Library</h1></Link>
+            <Link to={`/`}><h1 className="title">Book Library</h1></Link>
             <header>
                 <nav>
                     <Link to={`/`}>All Books</Link>
@@ -74,11 +100,13 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path="/books/:id"      element={<BookDetails />} />
-                <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/:id/edit" element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/favorites"      element={<BookList books={favoriteBooks} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
+                <Route path="/favorites"                    element={<BookList books={favoriteBooks} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
+                <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
+                <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit"               element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
+                <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
             </Routes>
         </>
     )

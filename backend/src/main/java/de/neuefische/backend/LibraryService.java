@@ -55,7 +55,18 @@ public class LibraryService {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
     }
+    public List<Book> getBooksByTitle(String title) {
+        List<Book> filteredListByTitle;
+        filteredListByTitle= libraryRepository.findByTitleRegexIgnoreCase(title);
+        List<Book> listOfBooksWithTheSameTitle = filteredListByTitle.stream().filter(book -> book.title().equalsIgnoreCase(title)).toList();
+        if(!listOfBooksWithTheSameTitle.isEmpty()){
+            return listOfBooksWithTheSameTitle;
+        }else if(!filteredListByTitle.isEmpty()){
+            return filteredListByTitle;
+        }else{
+            throw new NoSuchElementException("Das Buch mit diesem Title oder mit ähnlichem Title leider nicht gefunden");
+        }
 
 
-
+    }
 }

@@ -3,8 +3,11 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-
-export default function BookDetails(){
+type Props={
+   /* showBack:boolean*/
+    showHomepage:boolean
+}
+export default function BookDetails(props:Props ){
 
     const urlParams = useParams()
 
@@ -41,7 +44,13 @@ export default function BookDetails(){
                 }
 
             </div>
+            {props.showHomepage &&
                 <button className="backHomeBTN" onClick={()=>navigate("/")}>Back to Homepage</button>
+            }
+           {/* {props.showBack &&
+                <button className="backHomeBTN" onClick={()=>navigate("/books/search/:title")}>Back</button>
+            }*/}
+
 
         </>
     );

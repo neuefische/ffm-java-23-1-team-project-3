@@ -6,6 +6,9 @@ type Props = {
     headline?: string
     books: Book[]
     onItemChange: () => void
+    showAdd: boolean
+    showHomepage: boolean
+    showSearch: boolean
 }
 
 export default function BookList( props: Props ) {
@@ -13,16 +16,28 @@ export default function BookList( props: Props ) {
     return (
         <>
         {props.headline && <h3>{props.headline}</h3>}
+            {props.showSearch &&
+                <button className="searchButton" onClick={()=>navigate("/books/search")}>
+                    <h3>Search a book title</h3>
+                    <p>click here</p>
+                </button>
+            }
 
         <div className="BookList">
+            {props.showAdd &&
             <button className="BookCard" onClick={()=>navigate("/books/add")}>
                 <h3>Add a new Book</h3>
                 <p>click here</p>
             </button>
+            }
             {
                 props.books.map( book =>
                     <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>
                 )
+            }
+            {
+                props.showHomepage &&
+                <button type="button" onClick={()=>navigate("/")}>Back to Homepage</button>
             }
         </div>
         </>

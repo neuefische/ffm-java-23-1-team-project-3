@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -104,6 +106,56 @@ class LibraryServiceTest {
 		//WHEN
 		//THEN
 		assertThrows(NoSuchElementException.class, ()->libraryService.getBookById(id));
+	}
+	@Test
+	void testFindBooksByTitle_If_TitleExistsAsExactMatch_Then_itReturnsAllBooksWithSimilarTitle(){
+        //GIVEN
+		String title = "titleExist";
+		Book book = new Book("1",title,"author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		List<Book> books = new ArrayList<>();
+		books.add(book);
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(books);
+
+		//WHEN
+		List<Book> actual = libraryService.getBooksByTitle(title);
+
+		//THEN
+		Book bookToSave = new Book("1","titleExist","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		List<Book> expected = List.of(bookToSave);
+		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
+		assertEquals(expected,actual);
+	}
+
+	@Test
+	void testFindBooksByTitle_If_TitleDoesNotMatch_Then_itReturnsAllBooksThatPartiallyContainTheTitle(){
+        //GIVEN
+		String title = "TitleNotExist";
+		Book book1 = new Book("1","title1","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		Book book2 = new Book("2","title2","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		List<Book> books = new ArrayList<>();
+		books.add(book1);
+		books.add(book2);
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(books);
+
+		//WHEN
+		List<Book> actual = libraryService.getBooksByTitle(title);
+
+		//THEN
+		Book bookToSave1 = new Book("1","title1","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		Book bookToSave2 =  new Book("2","title2","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		List<Book> expected = List.of(bookToSave1,bookToSave2);
+		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
+		assertEquals(expected,actual);
+	}
+	@Test
+	void testFindBooksByTitle_If_TitleNotExists_NeitherIdenticallyNorPartially_Then_itReturnsException(){
+		//GIVEN
+		String title = "TitleNotExistAtAll";
+
+		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(emptyList());
+		//WHEN
+		//THEN
+		assertThrows(NoSuchElementException.class, ()->libraryService.getBooksByTitle(title));
 	}
 
 

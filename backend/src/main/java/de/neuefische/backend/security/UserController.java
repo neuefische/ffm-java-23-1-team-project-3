@@ -26,6 +26,7 @@ public class UserController {
 					System.out.println("   ["+key+"]: "+value+ (value==null ? "" : " { Class:"+value.getClass().getName()+" }"))
 			);
 			return new UserInfos(
+					true,
 					Objects.toString( user.getAttribute("id"), null ),
 					Objects.toString( user.getAttribute("login"), null ),
 					Objects.toString( user.getAttribute("name"), null ),
@@ -35,6 +36,6 @@ public class UserController {
 			);
 		}
 
-		return new UserInfos( authentication.getName(), null,null, null,null,null);
+		return new UserInfos( false, authentication.getName(), null,null, null,null,null);
 	}
 }

@@ -17,22 +17,16 @@ public class UserController {
 	public UserInfos getMe() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println("Authentication: "+authentication);
-
-//		Object details = authentication.getDetails();
-//		Object credentials = authentication.getCredentials();
 		Object principal = authentication.getPrincipal();
-
-//		if (details!=null) System.out.println("   Details: "+details.getClass()+" -> "+details);
-//		if (credentials!=null) System.out.println("   Credentials: "+credentials.getClass()+" -> "+credentials);
 		if (principal!=null) System.out.println("   principal: "+principal.getClass()+" -> "+principal);
 
 		if (principal instanceof DefaultOAuth2User user) {
-			System.out.println("login: "+user.getAttribute("login"));
-			System.out.println("name: "+user.getAttribute("name"));
-			System.out.println("location: "+user.getAttribute("location"));
-			System.out.println("url: "+user.getAttribute("url"));
-			System.out.println("avatar_url: "+user.getAttribute("avatar_url"));
+			System.out.println("User Attributes:");
+			user.getAttributes().forEach((key, value) ->
+					System.out.println("   ["+key+"]: "+value+ (value==null ? "" : " { Class:"+value.getClass().getName()+" }"))
+			);
 			return new UserInfos(
+					Objects.toString( user.getAttribute("id"), null ),
 					Objects.toString( user.getAttribute("login"), null ),
 					Objects.toString( user.getAttribute("name"), null ),
 					Objects.toString( user.getAttribute("location"), null ),
@@ -41,6 +35,6 @@ public class UserController {
 			);
 		}
 
-		return new UserInfos( authentication.getName(), null, null,null,null);
+		return new UserInfos( authentication.getName(), null,null, null,null,null);
 	}
 }

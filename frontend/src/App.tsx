@@ -100,10 +100,11 @@ export default function App() {
                     <button onClick={me}>me</button>
                     {
                         user && user.isAuthenticated &&
-                        <span>
+                        <span className="current_user">
                             Current user:
-                            {user.avatar_url && <img width="30" height="30" alt="user avatar image" src={user.avatar_url}/>}
-                            <a href={user.url}>{user.name} [{user.id}]</a>
+                            <a href={user.url}>
+                                {user.avatar_url && <img alt="user avatar image" src={user.avatar_url}/>} {user.name} [{user.id}]
+                            </a>
                         </span>
                     }
                 </nav>

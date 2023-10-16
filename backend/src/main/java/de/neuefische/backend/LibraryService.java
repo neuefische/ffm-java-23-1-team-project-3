@@ -55,6 +55,7 @@ public class LibraryService {
             throw new NoSuchElementException("Buch nicht gefunden");
         }
     }
+
     public List<Book> getBooksByTitle(String title) {
         List<Book> filteredListByTitle;
         filteredListByTitle= libraryRepository.findByTitleRegexIgnoreCase(title);
@@ -66,7 +67,5 @@ public class LibraryService {
         }else{
             throw new NoSuchElementException("Das Buch mit diesem Title oder mit ähnlichem Title leider nicht gefunden");
         }
-
-
     }
 }

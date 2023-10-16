@@ -27,19 +27,15 @@
     margin-left: 2em;
 }
 
-.star{
-    /*
-    cursor: pointer;
-    display: block;
-    transition: all .2s ease-in;
-    color: #000;
-    */
-    border: none;
-    background: none;
+svg.not_favorite {
+    fill: #F2EDE4;
+}
+svg.favorite {
+    fill: #000000;
 }
 
-.star .notFavorite {
-    fill: #F2EDE4;
+.hidden {
+    display: none;
 }
 
 /* The actual popup (appears on top) */

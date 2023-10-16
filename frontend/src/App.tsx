@@ -46,6 +46,18 @@ export default function App() {
             })
     }
 
+    function login() {
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080': window.location.origin;
+        window.open(host + '/oauth2/authorization/github', '_blank');
+    }
+
+    function me() {
+        axios.get("/api/users/me")
+            .then(response => {
+                console.log(response.data)
+            })
+    }
+
     const favoriteBooks = books.filter(book => book.favorite)
 
     return (
@@ -56,6 +68,8 @@ export default function App() {
                 <nav>
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
+                    <button onClick={login}>Login</button>
+                    <button onClick={me}>me</button>
                 </nav>
             </header>
 

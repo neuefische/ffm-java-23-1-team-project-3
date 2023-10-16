@@ -56,7 +56,7 @@ export default function App() {
                     throw new Error("Get wrong response status, when loading the books after searching: "+response.status);
                 setBooksFromResearch(response.data)
                 console.log(title)
-                navigate("/books/search/:title");
+                navigate("/books/search/title");
             })
             .catch((error)=>{
                 console.error(error);
@@ -75,7 +75,7 @@ export default function App() {
                 <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit"               element={<EditBook books={books} reload={loadAllBooks}/>}/>
-                <Route path="/books/search/:title"          element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={loadAllBooks}/>}/>
+                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={showBooksAfterSearch}/>}/>
             </Routes>
 

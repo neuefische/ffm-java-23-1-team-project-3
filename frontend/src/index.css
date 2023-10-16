@@ -16,9 +16,20 @@ L Blue: #DAEDE2
 
 header{
   margin: 1em 0;
-  height: 5px;
+  /*height: 5px;*/
   background: rgb(97,147,162);
   background: radial-gradient(circle, rgba(97,147,162,1) 0%, rgba(44,51,89,1) 100%);
+}
+
+header nav a {
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  margin: 0.3em 0 0.3em 1em;
+  background-color: #F2EDE4;
+}
+
+header nav a:hover {
+  background-color: #eed9b8;
 }
 
 h1{
@@ -52,6 +63,7 @@ button {
 /*border-radius: 2px;*/
   border: 1px solid #75B8BF;
   margin-right: 1em;
+  padding-top: 4px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;

@@ -3,6 +3,7 @@ import BookCard from "./BookCard.tsx";
 import {useNavigate} from "react-router-dom";
 
 type Props = {
+    headline?: string
     books: Book[]
     onItemChange: () => void
     showAdd: boolean
@@ -14,6 +15,7 @@ export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
         <>
+        {props.headline && <h3>{props.headline}</h3>}
             {props.showSearch &&
                 <button className="searchButton" onClick={()=>navigate("/books/search")}>
                     <h3>Search a book title</h3>
@@ -37,7 +39,6 @@ export default function BookList( props: Props ) {
                 props.showHomepage &&
                 <button type="button" onClick={()=>navigate("/")}>Back to Homepage</button>
             }
-
         </div>
         </>
     )

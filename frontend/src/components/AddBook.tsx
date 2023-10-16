@@ -7,24 +7,37 @@ type Props ={
     onItemChange: () => void
 }
 export default function AddBook(props: Props) {
-    const [title, setTitle] = useState<string>("");
-    const [author, setAuthor] = useState<string>("");
+    const emptyBook: Book = {
+        id         : "",
+        title      : "",
+        author     : "",
+        description: "",
+        publisher  : "",
+        isbn       : "",
+        coverUrl   : "",
+        favorite   : false
+    };
+    const [book, updateBook] = useState<Book>(emptyBook);
     const navigate = useNavigate();
-    function addTitle(title: ChangeEvent<HTMLInputElement>){
-        setTitle(title.target.value);
+    console.debug(`Rendering AddBook {}`);
+
+    function updateBookValue( name:string, value:string ) {
+        updateBook( {
+            ...book,
+            [name]: value
+        } );
     }
-    function addAuthor(author: ChangeEvent<HTMLInputElement>){
-        setAuthor(author.target.value);
+
+    function onChangeFcnI( event: ChangeEvent<any> ) {
+        updateBookValue( event.target.name, event.target.value );
     }
+
     function saveNewBook(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
-        axios.post("/api/books",{
-            title: title,
-            author: author
-        } as Book)
+        axios
+            .post("/api/books", book)
             .then(()=>{
-                setTitle("");
-                setAuthor("");
+                updateBook(emptyBook);
                 props.onItemChange();
             })
         navigate("/");
@@ -33,10 +46,13 @@ export default function AddBook(props: Props) {
     return (
         <>
             <form className="addBookForm" onSubmit={saveNewBook}>
-                <label>Title:</label>
-                <input name="Title" value={title} onChange={addTitle}/>
-                <label>Author:</label>
-                <input name="Author" value={author} onChange={addAuthor}/>
+                <label htmlFor="fld_title"       >Title       :</label><input    id="fld_title"       name="title"       value={book.title      } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_author"      >Author      :</label><input    id="fld_author"      name="author"      value={book.author     } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_description" >Description :</label><textarea id="fld_description" name="description" value={book.description} onChange={onChangeFcnI}/>
+                <label htmlFor="fld_publisher"   >Publisher   :</label><input    id="fld_publisher"   name="publisher"   value={book.publisher  } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_isbn"        >ISBN        :</label><input    id="fld_isbn"        name="isbn"        value={book.isbn       } onChange={onChangeFcnI}/>
+                <label htmlFor="fld_coverUrl"    >Cover URL   :</label><input    id="fld_coverUrl"    name="coverUrl"    value={book.coverUrl   } onChange={onChangeFcnI}/>
+                {book.coverUrl && <img alt="Cover Image" src={book.coverUrl}/>}
                 <div>
                     <button>Add New Book</button>
                     <button type="button" onClick={()=>navigate("/")}>Cancel</button>

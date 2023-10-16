@@ -49,6 +49,19 @@ export default function App() {
             })
     }
 
+    function login() {
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080': window.location.origin;
+        window.open(host + '/oauth2/authorization/github', '_blank');
+    }
+
+    function me() {
+        axios.get("/api/users/me")
+            .then(response => {
+                console.log(response.data)
+            })
+    }
+
+    const favoriteBooks = books.filter(book => book.favorite)
     function showBooksAfterSearch(title : string){
         axios.get("/api/books/search/"+ title)
             .then((response) => {
@@ -67,18 +80,23 @@ export default function App() {
         <>
             <Link to={`/`}><h1 className="title">Book Library</h1></Link>
             <header>
-                {}
+                <nav>
+                    <Link to={`/`}>All Books</Link>
+                    <Link to={`/favorites`}>My Favorites</Link>
+                    <button onClick={login}>Login</button>
+                    <button onClick={me}>me</button>
+                </nav>
             </header>
 
             <Routes>
+                <Route path="/favorites"                    element={<BookList books={favoriteBooks} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
                 <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
                 <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/:id/edit"               element={<EditBook books={books} reload={loadAllBooks}/>}/>
+                <Route path="/books/:id/edit"               element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={showBooksAfterSearch}/>}/>
             </Routes>
-
         </>
     )
 }

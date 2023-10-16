@@ -28,10 +28,18 @@
 }
 
 .star{
+    /*
     cursor: pointer;
     display: block;
     transition: all .2s ease-in;
     color: #000;
+    */
+    border: none;
+    background: none;
+}
+
+.star .notFavorite {
+    fill: #F2EDE4;
 }
 
 /* The actual popup (appears on top) */

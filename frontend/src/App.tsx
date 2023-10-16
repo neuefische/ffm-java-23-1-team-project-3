@@ -46,7 +46,6 @@ export default function App() {
             })
     }
 
-
     function login() {
         const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080': window.location.origin;
         window.open(host + '/oauth2/authorization/github', '_blank');
@@ -59,13 +58,16 @@ export default function App() {
             })
     }
 
+    const favoriteBooks = books.filter(book => book.favorite)
+
     return (
         <>
 
             <Link to={`/`}><h1>Book Library</h1></Link>
             <header>
-                {}
                 <nav>
+                    <Link to={`/`}>All Books</Link>
+                    <Link to={`/favorites`}>My Favorites</Link>
                     <button onClick={login}>Login</button>
                     <button onClick={me}>me</button>
                 </nav>
@@ -76,6 +78,7 @@ export default function App() {
                 <Route path="/"               element={<BookList books={books} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"      element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit" element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
+                <Route path="/favorites"      element={<BookList books={favoriteBooks} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
             </Routes>
         </>
     )

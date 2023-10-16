@@ -7,4 +7,5 @@ export type Book = {
     publisher  : string
     isbn       : string
     coverUrl   : string
+    favorite   : boolean
 }

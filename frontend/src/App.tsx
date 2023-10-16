@@ -13,6 +13,7 @@ export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
     const [timestamp, setTimestamp] = useState<string>("");
     const [booksFromResearch, setBooksFromResearch] = useState<Book[]>([]);
+    const [title, setTitle] = useState<string>("");
     console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
     const navigate = useNavigate();
 
@@ -22,6 +23,10 @@ export default function App() {
         return () => clearInterval(intervalID);
     }, [ timestamp ]);
 
+    function updateBookList(){
+        loadAllBooks();
+        showBooksAfterSearch(title,false);
+    }
     function loadAllBooks (){
         axios.get("/api/books")
             .then((response) => {
@@ -62,14 +67,20 @@ export default function App() {
     }
 
     const favoriteBooks = books.filter(book => book.favorite)
-    function showBooksAfterSearch(title : string){
+
+    function setSearch(title : string){
+        setTitle(title);
+        showBooksAfterSearch(title,true);
+    }
+    function showBooksAfterSearch(title : string, jumpToList : boolean){
         axios.get("/api/books/search/"+ title)
             .then((response) => {
                 if (response.status!==200)
                     throw new Error("Get wrong response status, when loading the books after searching: "+response.status);
                 setBooksFromResearch(response.data)
                 console.log(title)
-                navigate("/books/search/title");
+                if(jumpToList)
+                  navigate("/books/search/title");
             })
             .catch((error)=>{
                 console.error(error);
@@ -94,8 +105,8 @@ export default function App() {
                 <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit"               element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={showBooksAfterSearch}/>}/>
+                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
+                <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
             </Routes>
         </>
     )

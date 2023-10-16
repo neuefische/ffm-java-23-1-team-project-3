@@ -111,7 +111,7 @@ class LibraryServiceTest {
 	void testFindBooksByTitle_If_TitleExistsAsExactMatch_Then_itReturnsAllBooksWithSimilarTitle(){
         //GIVEN
 		String title = "titleExist";
-		Book book = new Book("1",title,"author");
+		Book book = new Book("1",title,"author","Desc1", "Publisher1", "ISBN1", "URL1", false);
 		List<Book> books = new ArrayList<>();
 		books.add(book);
 		when(libraryRepository.findByTitleRegexIgnoreCase(title)).thenReturn(books);
@@ -120,7 +120,7 @@ class LibraryServiceTest {
 		List<Book> actual = libraryService.getBooksByTitle(title);
 
 		//THEN
-		Book bookToSave = new Book("1","titleExist","author");
+		Book bookToSave = new Book("1","titleExist","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
 		List<Book> expected = List.of(bookToSave);
 		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
 		assertEquals(expected,actual);
@@ -130,8 +130,8 @@ class LibraryServiceTest {
 	void testFindBooksByTitle_If_TitleDoesNotMatch_Then_itReturnsAllBooksThatPartiallyContainTheTitle(){
         //GIVEN
 		String title = "TitleNotExist";
-		Book book1 = new Book("1","title1","author");
-		Book book2 = new Book("2","title2","author");
+		Book book1 = new Book("1","title1","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		Book book2 = new Book("2","title2","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
 		List<Book> books = new ArrayList<>();
 		books.add(book1);
 		books.add(book2);
@@ -141,8 +141,8 @@ class LibraryServiceTest {
 		List<Book> actual = libraryService.getBooksByTitle(title);
 
 		//THEN
-		Book bookToSave1 = new Book("1","title1","author");
-		Book bookToSave2 =  new Book("2","title2","author");
+		Book bookToSave1 = new Book("1","title1","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
+		Book bookToSave2 =  new Book("2","title2","author","Desc1", "Publisher1", "ISBN1", "URL1", false);
 		List<Book> expected = List.of(bookToSave1,bookToSave2);
 		verify(libraryRepository).findByTitleRegexIgnoreCase(title);
 		assertEquals(expected,actual);

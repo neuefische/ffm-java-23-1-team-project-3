@@ -94,7 +94,7 @@ class LibraryIntegrationTest {
 	void getBooksByTitle_If_TitleExistsAsExactMatch_Then_itReturnsAllBooksWithSimilarTitle() throws Exception {
 		//GIVEN
 		String title= "title 1";
-		Book book = new Book("id 1",title,"author 1");
+		Book book = new Book("id 1",title,"author 1","Desc 1","Publisher 1","ISBN 1","URL 1", false);
 		libraryRepository.save(book);
 
 		//WHEN
@@ -107,7 +107,12 @@ class LibraryIntegrationTest {
 					{
 						"id": "id 1",
 						"title": "title 1",
-						"author": "author 1"
+						"author": "author 1",
+						"description": "Desc 1",
+						"publisher"  : "Publisher 1",
+						"isbn"       : "ISBN 1",
+						"coverUrl"   : "URL 1",
+						"favorite"	 : false
 					}
 					]
 				"""));
@@ -118,7 +123,7 @@ class LibraryIntegrationTest {
 	void getBooksByTitle_If_TitleDoesNotMatch_Then_itReturnsAllBooksThatPartiallyContainTheTitle() throws Exception {
 		//GIVEN
 		String title= "Java";
-		Book book = new Book("id 1","java 1","author 1");
+		Book book = new Book("id 1","java 1","author 1","Desc 1","Publisher 1","ISBN 1","URL 1", false);
 		libraryRepository.save(book);
 
 		//WHEN
@@ -131,7 +136,12 @@ class LibraryIntegrationTest {
 					{
 						"id": "id 1",
 						"title": "java 1",
-						"author": "author 1"
+						"author": "author 1",
+						"description": "Desc 1",
+						"publisher"  : "Publisher 1",
+						"isbn"       : "ISBN 1",
+						"coverUrl"   : "URL 1",
+						"favorite"	 : false
 					}
 					]
 				"""));

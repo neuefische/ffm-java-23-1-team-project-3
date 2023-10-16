@@ -34,6 +34,11 @@ Entdecke, lese und genieße Bücher auf eine neue Art und Weise - mit unserer Bu
 * `MONGO_DB_NAME`
   * name of used database on DB server above
   * to separate databases of different run configurations / scenarios
+#### OAuth2
+* `OAUTH_GITHUB_CLIENT_ID`
+  * client id from OAuth2 app in GitHub
+* `OAUTH_GITHUB_CLIENT_SECRET`
+  * client secret from OAuth2 app in GitHub
 ### GitHub Secrets 
 * `DOCKERHUB_PASSWORD`
   * used for pushing build docker image to docker in workflow "Deploy to render" (`.github/workflows/deploy.yml`)

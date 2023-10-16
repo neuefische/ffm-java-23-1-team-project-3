@@ -44,7 +44,7 @@ class ImageServiceTest {
 	void whenUploadFromURL_getsKnownID_returnURL() throws IOException {
 		// Given
 		when(libraryRepository.findById("TestId")).thenReturn(Optional.of(
-				new Book("TestId", "", "", "", "", "", "")
+				new Book("TestId", "", "", "", "", "", "", false)
 		));
 
 		// When
@@ -72,7 +72,7 @@ class ImageServiceTest {
 	void whenUploadFromFile_getsKnownID_returnURL() throws IOException {
 		// Given
 		when(libraryRepository.findById("TestId")).thenReturn(Optional.of(
-				new Book("TestId", "", "", "", "", "", "")
+				new Book("TestId", "", "", "", "", "", "", false)
 		));
 
 		// When

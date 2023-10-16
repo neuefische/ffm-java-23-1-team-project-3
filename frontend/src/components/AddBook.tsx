@@ -15,6 +15,7 @@ export default function AddBook(props: Props) {
         publisher  : "",
         isbn       : "",
         coverUrl   : "",
+        favorite   : false
     };
     const navigate = useNavigate();
     console.debug(`Rendering AddBook {}`);

@@ -10,6 +10,7 @@ public record Book(
         String description,
         String publisher,
         String isbn,
-        String coverUrl
+        String coverUrl,
+        Boolean favorite
 ) {
 }

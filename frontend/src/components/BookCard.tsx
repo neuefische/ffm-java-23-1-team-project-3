@@ -29,6 +29,17 @@ export default function BookCard( props: Props ) {
         }
     }
 
+    function favor( favorite: boolean ) {
+        axios.put("/api/books/" + props.book.id, {
+            ...props.book,
+            favorite: favorite
+        })
+            .then(props.onItemChange)
+            .catch(reason => {
+                console.error(reason)
+            });
+    }
+
     return (
         <div className="BookCard">
             <Link to={`/books/${props.book.id}`}>
@@ -58,9 +69,14 @@ export default function BookCard( props: Props ) {
                     <path fillRule="evenodd" clipRule="evenodd" d="M14.5 3L15.5 4H19V6H5V4H8.5L9.5 3H14.5ZM12 12.59L14.12 10.47L15.53 11.88L13.41 14L15.53 16.12L14.12 17.53L12 15.41L9.88 17.53L8.47 16.12L10.59 14L8.46 11.88L9.87 10.47L12 12.59ZM6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM16 9H8V19H16V9Z" fill="#000000"/>
                 </svg>
             </button>
-            <button>
+            {/*<button>
                 <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" className="icon">
                     <path d="M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 0 0 .6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0 0 46.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z"/>
+                </svg>
+            </button>*/}
+            <button className="star" onClick={() => favor(!props.book.favorite)}>
+                <svg className={props.book.favorite ? "" : "notFavorite"} width="24" height="24" viewBox="0 0 24 24" focusable="false">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
                 </svg>
             </button>
         </div>

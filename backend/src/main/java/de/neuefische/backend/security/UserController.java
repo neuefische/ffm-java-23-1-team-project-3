@@ -2,7 +2,7 @@ package de.neuefische.backend.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ public class UserController {
 		Object principal = authentication.getPrincipal();
 		if (principal!=null) System.out.println("   principal: "+principal.getClass()+" -> "+principal);
 
-		if (principal instanceof DefaultOAuth2User user) {
+		if (principal instanceof OAuth2AuthenticatedPrincipal user) {
 			System.out.println("User Attributes:");
 			user.getAttributes().forEach((key, value) ->
 					System.out.println("   ["+key+"]: "+value+ (value==null ? "" : " { Class:"+value.getClass().getName()+" }"))

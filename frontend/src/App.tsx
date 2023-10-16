@@ -1,6 +1,6 @@
 import './App.css';
 import {useEffect, useState} from "react";
-import {Book} from "./Types.tsx";
+import {Book, UserInfos} from "./Types.tsx";
 import axios from "axios";
 import BookList from "./components/BookList.tsx";
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
@@ -14,6 +14,7 @@ export default function App() {
     const [timestamp, setTimestamp] = useState<string>("");
     const [booksFromResearch, setBooksFromResearch] = useState<Book[]>([]);
     const [title, setTitle] = useState<string>("");
+    const [user, setUser] = useState<UserInfos>();
     console.debug(`Rendering App { books: ${books.length} books in list, timestamp: "${timestamp}" }`);
     const navigate = useNavigate();
 
@@ -62,7 +63,8 @@ export default function App() {
     function me() {
         axios.get("/api/users/me")
             .then(response => {
-                console.log(response.data)
+                console.log(response.data);
+                setUser(response.data);
             })
     }
 
@@ -94,8 +96,16 @@ export default function App() {
                 <nav>
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
-                    <button onClick={login}>Login</button>
+                    {(!user || !user.isAuthenticated) && <button onClick={login}>Login</button>}
                     <button onClick={me}>me</button>
+                    {
+                        user && user.isAuthenticated &&
+                        <span>
+                            Current user:
+                            {user.avatar_url && <img width="30" height="30" alt="user avatar image" src={user.avatar_url}/>}
+                            <a href={user.url}>{user.name} [{user.id}]</a>
+                        </span>
+                    }
                 </nav>
             </header>
 

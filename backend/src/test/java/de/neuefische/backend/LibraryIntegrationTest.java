@@ -52,7 +52,7 @@ class LibraryIntegrationTest {
     void getBookByID_ifFound() throws Exception {
         //GIVEN
         String id= "1";
-        Book book = new Book(id,"Title 1","Author 1","Desc 1","Publisher 1","ISBN 1","URL 1");
+        Book book = new Book(id,"Title 1","Author 1","Desc 1","Publisher 1","ISBN 1","URL 1", false);
         libraryRepository.save(book);
 
         //WHEN
@@ -69,7 +69,7 @@ class LibraryIntegrationTest {
 						"publisher"  : "Publisher 1",
 						"isbn"       : "ISBN 1",
 						"coverUrl"   : "URL 1",
-						"favorite"   : false
+						"favorite"	 : false
 					}
 				"""));
     }
@@ -91,10 +91,10 @@ class LibraryIntegrationTest {
 	@DirtiesContext
 	void whenGetAllBooks_performsOnFilledRepo_returnsRepoContent() throws Exception {
 		// Given
-		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1"));
-		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2"));
-		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3"));
-		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4"));
+		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
+		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2", false));
+		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3", false));
+		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4", false));
 		timestampRepository.save(new Timestamp("test", "<TestTimestamp>"));
 
 		// When
@@ -125,7 +125,7 @@ class LibraryIntegrationTest {
 	@DirtiesContext
 	void removeBookTest() throws Exception {
 		// Given
-		libraryRepository.save(new Book("1", "My new book", "Me", "Desc 1", "Publisher 1", "ISBN 1", "URL 1"));
+		libraryRepository.save(new Book("1", "My new book", "Me", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
 
 		// When
 		mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/1"))
@@ -161,10 +161,10 @@ class LibraryIntegrationTest {
 	@DirtiesContext
 	void whenUpdateProduct_getsInvalidID_returnsBadRequest() throws Exception {
 		// Given
-		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1"));
-		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2"));
-		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3"));
-		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4"));
+		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
+		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2", false));
+		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3", false));
+		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4", false));
 
 		// When
 		mockMvc
@@ -184,10 +184,10 @@ class LibraryIntegrationTest {
 	@DirtiesContext
 	void whenUpdateProduct_getsUnknownID_returnsNotFound() throws Exception {
 		// Given
-		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1"));
-		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2"));
-		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3"));
-		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4"));
+		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
+		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2", false));
+		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3", false));
+		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4", false));
 
 		// When
 		mockMvc
@@ -207,10 +207,10 @@ class LibraryIntegrationTest {
 	@DirtiesContext
 	void whenUpdateProduct_getsValidID_returnsChangedBook() throws Exception {
 		// Given
-		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1"));
-		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2"));
-		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3"));
-		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4"));
+		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
+		libraryRepository.save(new Book("id2", "Title 2", "Author 2", "Desc 2", "Publisher 2", "ISBN 2", "URL 2", false));
+		libraryRepository.save(new Book("id3", "Title 3", "Author 3", "Desc 3", "Publisher 3", "ISBN 3", "URL 3", false));
+		libraryRepository.save(new Book("id4", "Title 4", "Author 4", "Desc 4", "Publisher 4", "ISBN 4", "URL 4", false));
 
 		// When
 		mockMvc

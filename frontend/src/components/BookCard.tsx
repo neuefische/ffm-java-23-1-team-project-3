@@ -8,6 +8,8 @@ type Props = {
     user?: UserInfos
 }
 
+const showButtonsAlways = true;
+
 export default function BookCard( props: Props ) {
     const navigate = useNavigate();
 
@@ -50,7 +52,7 @@ export default function BookCard( props: Props ) {
             </Link>
 
             {
-                props.user?.isAuthenticated &&
+                (showButtonsAlways || props.user?.isAuthenticated) &&
                 <>
                     <div id="popupOverlay" className="popup"></div>
                     <span className="popup" id={props.book.id}>

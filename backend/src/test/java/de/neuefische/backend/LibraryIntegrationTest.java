@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -201,6 +202,7 @@ class LibraryIntegrationTest {
 
 	@Test
 	@DirtiesContext
+	@WithMockUser
 	void removeBookTest() throws Exception {
 		// Given
 		libraryRepository.save(new Book("1", "My new book", "Me", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
@@ -214,6 +216,7 @@ class LibraryIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void whenAddBooks_getsNewBooks_returnsBooks() throws Exception {
         // Given
 
@@ -237,6 +240,7 @@ class LibraryIntegrationTest {
 
 	@Test
 	@DirtiesContext
+	@WithMockUser
 	void whenUpdateProduct_getsInvalidID_returnsBadRequest() throws Exception {
 		// Given
 		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
@@ -260,6 +264,7 @@ class LibraryIntegrationTest {
 
 	@Test
 	@DirtiesContext
+	@WithMockUser
 	void whenUpdateProduct_getsUnknownID_returnsNotFound() throws Exception {
 		// Given
 		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));
@@ -283,6 +288,7 @@ class LibraryIntegrationTest {
 
 	@Test
 	@DirtiesContext
+	@WithMockUser
 	void whenUpdateProduct_getsValidID_returnsChangedBook() throws Exception {
 		// Given
 		libraryRepository.save(new Book("id1", "Title 1", "Author 1", "Desc 1", "Publisher 1", "ISBN 1", "URL 1", false));

@@ -1,8 +1,9 @@
-import {Book} from "../Types.tsx";
+import {Book, UserInfos} from "../Types.tsx";
 import BookCard from "./BookCard.tsx";
 import {useNavigate} from "react-router-dom";
 
 type Props = {
+    user?: UserInfos;
     headline?: string
     books: Book[]
     onItemChange: () => void
@@ -24,15 +25,16 @@ export default function BookList( props: Props ) {
             }
 
         <div className="BookList">
-            {props.showAdd &&
-            <button className="BookCard" onClick={()=>navigate("/books/add")}>
-                <h3>Add a new Book</h3>
-                <p>click here</p>
-            </button>
+            {
+                props.showAdd && props.user?.isAuthenticated &&
+                <button className="BookCard" onClick={()=>navigate("/books/add")}>
+                    <h3>Add a new Book</h3>
+                    <p>click here</p>
+                </button>
             }
             {
                 props.books.map( book =>
-                    <BookCard key={book.id} book={book} onItemChange={props.onItemChange}/>
+                    <BookCard key={book.id} book={book} user={props.user} onItemChange={props.onItemChange}/>
                 )
             }
             {

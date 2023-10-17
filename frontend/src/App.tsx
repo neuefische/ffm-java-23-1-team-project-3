@@ -111,12 +111,12 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path="/favorites"                    element={<BookList books={favoriteBooks} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
+                <Route path="/favorites"                    element={<BookList books={favoriteBooks} user={user} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
                 <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
-                <Route path="/"                             element={<BookList books={books} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/"                             element={<BookList books={books} user={user} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
                 <Route path="/books/:id/edit"               element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
+                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} user={user} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
                 <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
             </Routes>
         </>

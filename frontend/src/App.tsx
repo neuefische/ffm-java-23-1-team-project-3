@@ -24,6 +24,8 @@ export default function App() {
         return () => clearInterval(intervalID);
     }, [ timestamp ]);
 
+    useEffect(determineCurrentUser, []);
+
     function updateBookList(){
         loadAllBooks();
         showBooksAfterSearch(title,false);
@@ -57,10 +59,20 @@ export default function App() {
 
     function login() {
         const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080': window.location.origin;
-        window.open(host + '/oauth2/authorization/github', '_blank');
+        window.open(host + '/oauth2/authorization/github', '_self');
     }
 
-    function me() {
+    function logout() {
+        axios.post("/api/logout")
+            .then(() => {
+                setUser(undefined)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    function determineCurrentUser() {
         axios.get("/api/users/me")
             .then(response => {
                 console.log(response.data);
@@ -97,7 +109,8 @@ export default function App() {
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
                     {!user?.isAuthenticated && <button onClick={login}>Login</button>}
-                    <button onClick={me}>me</button>
+                    { user?.isAuthenticated && <button onClick={logout}>Logout</button>}
+                    <button onClick={determineCurrentUser}>me</button>
                     {
                         user?.isAuthenticated &&
                         <span className="current_user">

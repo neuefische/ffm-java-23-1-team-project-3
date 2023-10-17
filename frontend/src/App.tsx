@@ -110,6 +110,7 @@ export default function App() {
                 <nav>
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
+                    <Link to={`/books/search`}>Search</Link>
                     {!user?.isAuthenticated && <button onClick={login}>Login</button>}
                     { user?.isAuthenticated && <button onClick={logout}>Logout</button>}
                     <button onClick={determineCurrentUser}>me</button>
@@ -126,12 +127,12 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path="/"                      element={<BookList books={books} user={user} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/"                      element={<BookList books={books} user={user} showAdd={true} onItemChange={loadAllBooks}/>}/>
                 <Route path="/login"                 element={<LoginPage login={login}/>}/>
-                <Route path="/favorites"             element={<BookList books={favoriteBooks} user={user} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
+                <Route path="/favorites"             element={<BookList books={favoriteBooks} user={user} showAdd={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
                 <Route path="/books/:id"             element={<BookDetails showHomepage={true} />} />
                 <Route path="/books/search"          element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
-                <Route path="/books/search/title"    element={<BookList books={booksFromResearch} user={user} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
+                <Route path="/books/search/title"    element={<BookList books={booksFromResearch} user={user} showAdd={false} onItemChange={updateBookList}/>}/>
                 <Route element={<ProtectedRoutes user={user} />}>
                     <Route path="/books/add"         element={<AddBook onItemChange={loadAllBooks}/>}/>
                     <Route path="/books/:id/edit"    element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>

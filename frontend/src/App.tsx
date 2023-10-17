@@ -8,6 +8,8 @@ import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
 import SearchBookByTitle from "./components/SearchBookByTitle.tsx";
+import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
+import LoginPage from "./components/LoginPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -23,6 +25,8 @@ export default function App() {
         const intervalID = setInterval(checkIfUpdateNeeded, 3000);
         return () => clearInterval(intervalID);
     }, [ timestamp ]);
+
+    useEffect(determineCurrentUser, []);
 
     function updateBookList(){
         loadAllBooks();
@@ -57,10 +61,20 @@ export default function App() {
 
     function login() {
         const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080': window.location.origin;
-        window.open(host + '/oauth2/authorization/github', '_blank');
+        window.open(host + '/oauth2/authorization/github', '_self');
     }
 
-    function me() {
+    function logout() {
+        axios.post("/api/logout")
+            .then(() => {
+                setUser(undefined)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    function determineCurrentUser() {
         axios.get("/api/users/me")
             .then(response => {
                 console.log(response.data);
@@ -96,8 +110,10 @@ export default function App() {
                 <nav>
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
+                    <Link to={`/books/search`}>Search</Link>
                     {!user?.isAuthenticated && <button onClick={login}>Login</button>}
-                    <button onClick={me}>me</button>
+                    { user?.isAuthenticated && <button onClick={logout}>Logout</button>}
+                    <button onClick={determineCurrentUser}>me</button>
                     {
                         user?.isAuthenticated &&
                         <span className="current_user">
@@ -111,13 +127,17 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path="/favorites"                    element={<BookList books={favoriteBooks} user={user} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
-                <Route path="/books/:id"                    element={<BookDetails showHomepage={true} />} />
-                <Route path="/"                             element={<BookList books={books} user={user} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/add"                    element={<AddBook onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/:id/edit"               element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
-                <Route path="/books/search/title"           element={<BookList books={booksFromResearch} user={user} showAdd={false} showHomepage={true} showSearch={false} onItemChange={updateBookList}/>}/>
-                <Route path="/books/search"                 element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
+                <Route path="/"                      element={<BookList books={books} user={user} showAdd={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/login"                 element={<LoginPage login={login}/>}/>
+                <Route path="/favorites"             element={<BookList books={favoriteBooks} user={user} showAdd={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
+                <Route path="/books/:id"             element={<BookDetails showHomepage={true} />} />
+                <Route path="/books/search"          element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>
+                <Route path="/books/search/title"    element={<BookList books={booksFromResearch} user={user} showAdd={false} onItemChange={updateBookList}/>}/>
+                <Route element={<ProtectedRoutes user={user} />}>
+                    <Route path="/books/add"         element={<AddBook onItemChange={loadAllBooks}/>}/>
+                    <Route path="/books/:id/edit"    element={<EditBook books={books} onItemChange={loadAllBooks}/>}/>
+                </Route>
+
             </Routes>
         </>
     )

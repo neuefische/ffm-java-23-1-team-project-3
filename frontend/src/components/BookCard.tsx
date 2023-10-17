@@ -15,7 +15,15 @@ export default function BookCard( props: Props ) {
 
     function deleteCard() {
         axios.delete("/api/books/" + props.book.id)
-            .then(props.onItemChange)
+            .then(response => {
+                if (response.status == 401)
+                    navigate("/login");
+                props.onItemChange();
+            })
+            .catch(error => {
+                navigate("/login");
+                console.error("Error on delete book", error)
+            })
 
         const popupOverlay = document.getElementById("popupOverlay");
         if(popupOverlay){

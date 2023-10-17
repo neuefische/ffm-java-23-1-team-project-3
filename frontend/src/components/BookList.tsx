@@ -8,8 +8,6 @@ type Props = {
     books: Book[]
     onItemChange: () => void
     showAdd: boolean
-    showHomepage: boolean
-    showSearch: boolean
 }
 
 const showButtonsAlways = true;
@@ -19,12 +17,6 @@ export default function BookList( props: Props ) {
     return (
         <>
         {props.headline && <h3>{props.headline}</h3>}
-            {props.showSearch &&
-                <button className="searchButton" onClick={()=>navigate("/books/search")}>
-                    <h3>Search a book title</h3>
-                    <p>click here</p>
-                </button>
-            }
 
         <div className="BookList">
             {
@@ -38,10 +30,6 @@ export default function BookList( props: Props ) {
                 props.books.map( book =>
                     <BookCard key={book.id} book={book} user={props.user} onItemChange={props.onItemChange}/>
                 )
-            }
-            {
-                props.showHomepage &&
-                <button type="button" onClick={()=>navigate("/")}>Back to Homepage</button>
             }
         </div>
         </>

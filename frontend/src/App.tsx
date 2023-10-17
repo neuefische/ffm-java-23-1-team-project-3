@@ -9,6 +9,7 @@ import EditBook from "./components/EditBook.tsx";
 import BookDetails from "./components/BookDetails.tsx";
 import SearchBookByTitle from "./components/SearchBookByTitle.tsx";
 import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
+import LoginPage from "./components/LoginPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([]);
@@ -126,6 +127,7 @@ export default function App() {
 
             <Routes>
                 <Route path="/"                      element={<BookList books={books} user={user} showAdd={true} showHomepage={false} showSearch={true} onItemChange={loadAllBooks}/>}/>
+                <Route path="/login"                 element={<LoginPage login={login}/>}/>
                 <Route path="/favorites"             element={<BookList books={favoriteBooks} user={user} showAdd={false} showHomepage={false} showSearch={false} onItemChange={loadAllBooks} headline={"My Favorites"}/>}/>
                 <Route path="/books/:id"             element={<BookDetails showHomepage={true} />} />
                 <Route path="/books/search"          element={<SearchBookByTitle getBooksAfterSearch={setSearch}/>}/>

@@ -10,6 +10,6 @@ export default function ProtectedRoutes(props: Props) {
     const isAuthenticated = props.user?.isAuthenticated;
 
     return(
-        isAuthenticated ? <Outlet /> : <Navigate to="/" />
+        isAuthenticated ? <Outlet /> : <Navigate to="/login" />
     )
 }

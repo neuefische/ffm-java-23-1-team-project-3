@@ -96,10 +96,10 @@ export default function App() {
                 <nav>
                     <Link to={`/`}>All Books</Link>
                     <Link to={`/favorites`}>My Favorites</Link>
-                    {(!user || !user.isAuthenticated) && <button onClick={login}>Login</button>}
+                    {!user?.isAuthenticated && <button onClick={login}>Login</button>}
                     <button onClick={me}>me</button>
                     {
-                        user && user.isAuthenticated &&
+                        user?.isAuthenticated &&
                         <span className="current_user">
                             Current user:
                             <a href={user.url}>

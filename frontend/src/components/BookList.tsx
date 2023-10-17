@@ -12,6 +12,8 @@ type Props = {
     showSearch: boolean
 }
 
+const showButtonsAlways = true;
+
 export default function BookList( props: Props ) {
     const navigate = useNavigate();
     return (
@@ -26,7 +28,7 @@ export default function BookList( props: Props ) {
 
         <div className="BookList">
             {
-                props.showAdd && props.user?.isAuthenticated &&
+                props.showAdd && (showButtonsAlways || props.user?.isAuthenticated) &&
                 <button className="BookCard" onClick={()=>navigate("/books/add")}>
                     <h3>Add a new Book</h3>
                     <p>click here</p>
